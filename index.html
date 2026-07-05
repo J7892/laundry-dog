@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laundry Dog - Side Scrolling Laundry Retriever Game</title>
+  <meta name="description" content="Help Laundry Dog navigate the house, jump over couches, slide under tables, and collect laundry for the washing machine!">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- Main Canvas -->
+    <canvas id="gameCanvas" width="960" height="540"></canvas>
+
+    <!-- HUD Overlay (Visible during gameplay) -->
+    <div id="hud" class="overlay-hud hidden">
+      <div class="hud-left">
+        <div class="hud-item shadow-glow">
+          <span class="hud-label">LEVEL</span>
+          <span id="hud-level-val" class="hud-val highlight-blue">1</span>
+        </div>
+        <div class="hud-item shadow-glow">
+          <span class="hud-label">SCORE</span>
+          <span id="hud-score-val" class="hud-val highlight-green">0000</span>
+        </div>
+      </div>
+      
+      <div class="hud-center">
+        <!-- Progress Bar towards the washing machine -->
+        <div class="progress-container shadow-glow">
+          <span class="progress-icon">🐶</span>
+          <div class="progress-bar-bg">
+            <div id="hud-progress-fill" class="progress-bar-fill"></div>
+          </div>
+          <span class="progress-icon">🧺</span>
+        </div>
+      </div>
+
+      <div class="hud-right">
+        <div class="hud-item shadow-glow">
+          <span class="hud-label">LAUNDRY</span>
+          <span id="hud-laundry-val" class="hud-val highlight-yellow">0 / 0</span>
+        </div>
+        <div class="hud-item shadow-glow">
+          <span class="hud-label">ENERGY</span>
+          <div id="hud-energy-container" class="energy-hearts">
+            <span class="heart active">❤️</span>
+            <span class="heart active">❤️</span>
+            <span class="heart active">❤️</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen Overlays -->
+    
+    <!-- 1. Start Screen -->
+    <div id="screen-start" class="screen-overlay">
+      <div class="screen-content">
+        <div class="title-container">
+          <span class="logo-emoji animate-bounce">🐶</span>
+          <h1 class="game-title text-gradient">LAUNDRY DOG</h1>
+          <p class="game-subtitle">The ultimate household laundry retriever!</p>
+        </div>
+
+        <div class="start-sections">
+          <!-- Left: Instructions -->
+          <div class="info-card instructions-card">
+            <h3>How to Play</h3>
+            <ul class="controls-list">
+              <li><span class="key">▲</span> or <span class="key">W</span> or <span class="key">Space</span> <span class="action">Jump (Hold to jump higher)</span></li>
+              <li><span class="key">▼</span> or <span class="key">S</span> <span class="action">Duck / Crawl under furniture</span></li>
+              <li><span class="key">◀</span> / <span class="key">▶</span> or <span class="key">A</span> / <span class="key">D</span> <span class="action">Move Left / Right</span></li>
+              <li><span class="key">P</span> or <span class="key">Esc</span> <span class="action">Pause Game</span></li>
+            </ul>
+            <div class="goal-box">
+              <p>🧺 <strong>Goal:</strong> Sniff out all the dirty laundry (socks, shirts, trousers) hidden around the house, then deposit them into the <strong>washing machine</strong> at the end of each room!</p>
+            </div>
+          </div>
+
+          <!-- Right: Level Select / Play -->
+          <div class="info-card select-card">
+            <h3>Choose Level</h3>
+            <div class="level-grid">
+              <button class="btn-level active" data-level="1">
+                <span class="lvl-num">01</span>
+                <span class="lvl-name">Living Room</span>
+              </button>
+              <button class="btn-level" data-level="2">
+                <span class="lvl-num">02</span>
+                <span class="lvl-name">Kitchen & Dining</span>
+              </button>
+              <button class="btn-level" data-level="3">
+                <span class="lvl-num">03</span>
+                <span class="lvl-name">Hallway & Stairs</span>
+              </button>
+              <button class="btn-level" data-level="4">
+                <span class="lvl-num">04</span>
+                <span class="lvl-name">Master Bed 🐾</span>
+              </button>
+              <button class="btn-level" data-level="5">
+                <span class="lvl-num">05</span>
+                <span class="lvl-name">Guest Room 🐾</span>
+              </button>
+              <button class="btn-level" data-level="6">
+                <span class="lvl-num">06</span>
+                <span class="lvl-name">Attic 🐾</span>
+              </button>
+              <button class="btn-level" data-level="7">
+                <span class="lvl-num">07</span>
+                <span class="lvl-name">Study Room 🐾</span>
+              </button>
+              <button class="btn-level" data-level="8">
+                <span class="lvl-num">08</span>
+                <span class="lvl-name">Game Room 🐾</span>
+              </button>
+              <button class="btn-level" data-level="9">
+                <span class="lvl-num">09</span>
+                <span class="lvl-name">Basement Vault 🐾</span>
+              </button>
+              <button class="btn-level" data-level="10">
+                <span class="lvl-num">10</span>
+                <span class="lvl-name">Backyard Patio 🐾</span>
+              </button>
+              <button class="btn-level" data-level="11">
+                <span class="lvl-num">11</span>
+                <span class="lvl-name">Infinite Mode ♾️</span>
+              </button>
+            </div>
+
+            <button id="btn-play-game" class="btn btn-primary btn-pulse">
+              <span>START RETRIEVING! 🧺</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="audio-config">
+          <button id="btn-toggle-music-start" class="btn-toggle-music">
+            <span class="music-icon">🎵</span> Music: <span class="music-status">ON</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Pause Screen -->
+    <div id="screen-pause" class="screen-overlay hidden">
+      <div class="screen-content dialog-box">
+        <h2 class="dialog-title">GAME PAUSED</h2>
+        <p class="dialog-text">Laundry Dog is taking a short nap...</p>
+        
+        <div class="dialog-actions vertical">
+          <button id="btn-resume" class="btn btn-primary">Resume Game</button>
+          <button id="btn-restart-level" class="btn btn-secondary">Restart Level</button>
+          <button id="btn-quit" class="btn btn-outline">Back to Menu</button>
+        </div>
+
+        <div class="audio-config-pause">
+          <button id="btn-toggle-music-pause" class="btn-toggle-music">
+            <span class="music-icon">🎵</span> Music: <span class="music-status">ON</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Level Complete (Victory) Screen -->
+    <div id="screen-victory" class="screen-overlay hidden">
+      <div class="screen-content dialog-box victory-glow">
+        <div class="victory-header">
+          <span class="victory-icon animate-spin-slow">🧺</span>
+          <h2 class="dialog-title text-gradient-victory">ROOM CLEANED!</h2>
+        </div>
+        
+        <div class="stats-panel">
+          <div class="stat-row">
+            <span class="stat-label">Laundry Collected</span>
+            <span id="victory-laundry-collected" class="stat-value highlight-yellow">0 / 0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Time Elapsed</span>
+            <span id="victory-time" class="stat-value">00:00</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Score Gained</span>
+            <span id="victory-score" class="stat-value highlight-green">+0</span>
+          </div>
+          <div class="rating-stars" id="victory-stars">
+            <span>⭐</span><span>⭐</span><span>⭐</span>
+          </div>
+        </div>
+
+        <div class="dialog-actions">
+          <button id="btn-next-level" class="btn btn-primary">Next Room 🚪</button>
+          <button id="btn-replay-level" class="btn btn-secondary">Play Again 🔁</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Game Over Screen -->
+    <div id="screen-gameover" class="screen-overlay hidden">
+      <div class="screen-content dialog-box gameover-glow">
+        <div class="gameover-header">
+          <span class="gameover-icon">💤</span>
+          <h2 class="dialog-title text-danger">TIRED OUT!</h2>
+        </div>
+        <p class="dialog-text">Dog ran out of energy. Time for a treat and a snooze.</p>
+
+        <div class="stats-panel">
+          <div class="stat-row">
+            <span class="stat-label">Final Score</span>
+            <span id="gameover-score" class="stat-value highlight-green">0000</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Room Cleared</span>
+            <span id="gameover-level" class="stat-value highlight-blue">Level 1</span>
+          </div>
+        </div>
+
+        <div class="dialog-actions">
+          <button id="btn-retry" class="btn btn-primary btn-pulse-red">Try Again 🐾</button>
+          <button id="btn-gameover-quit" class="btn btn-outline">Back to Menu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript File -->
+  <script src="game.js"></script>
+</body>
+</html>
