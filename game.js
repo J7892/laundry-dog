@@ -1043,8 +1043,10 @@ class Game {
       this.checkCollisions();
       this.updateParticles();
       this.updateTimer();
-    } else if (this.gameState === 'VICTORY') {
-      this.updateVictorySequence();
+    } else if (this.gameState === 'VICTORY' || this.gameState === 'VICTORY_SCREEN') {
+      if (this.gameState === 'VICTORY') {
+        this.updateVictorySequence();
+      }
       this.updateParticles();
     }
 
@@ -1515,7 +1517,7 @@ class Game {
   }
 
   showVictoryScreen() {
-    this.gameState = 'VICTORY';
+    this.gameState = 'VICTORY_SCREEN';
     this.synth.stopMusic();
     this.synth.playVictory();
     
@@ -1747,6 +1749,7 @@ class Game {
     let camX = this.player.x - this.gameWidth / 3.5;
     const maxCamX = this.levelData ? this.levelData.width - this.gameWidth : 0;
     camX = Math.max(0, Math.min(camX, maxCamX));
+    this.camX = camX; // Store for entities clipping
 
     this.ctx.save();
     this.ctx.translate(-camX, 0);
@@ -1789,46 +1792,55 @@ class Game {
     if (!l) return;
     
     const theme = l.theme || 'living-room';
+    const viewL = camX - 150;
+    const viewR = camX + this.gameWidth + 150;
 
     // --------------------------------------------------
     // A. WALL DRAWING (0 TO 480 Y)
     // --------------------------------------------------
     if (theme === 'patio') {
-      // Outdoor Sunset Sky Gradient
+      // Outdoor Sunset Sky Gradient - only fill viewport to optimize
       const skyGrad = this.ctx.createLinearGradient(0, 0, 0, 480);
       skyGrad.addColorStop(0, '#0ea5e9'); // bright blue sky top
       skyGrad.addColorStop(0.6, '#bae6fd'); // light sky blue
       skyGrad.addColorStop(1, '#ffedd5'); // sunset peach at horizon
       this.ctx.fillStyle = skyGrad;
-      this.ctx.fillRect(0, 0, l.width, 480);
+      this.ctx.fillRect(Math.max(0, viewL), 0, viewR - Math.max(0, viewL), 480);
 
-      // Draw Sunset Sun
-      this.ctx.fillStyle = '#ffedd5';
-      this.ctx.beginPath();
-      this.ctx.arc(600, 300, 70, 0, Math.PI * 2);
-      this.ctx.fill();
-      this.ctx.fillStyle = '#fdba74'; // orange sun glow
-      this.ctx.beginPath();
-      this.ctx.arc(600, 300, 50, 0, Math.PI * 2);
-      this.ctx.fill();
+      // Draw Sunset Sun (only if visible)
+      const sunX = 600;
+      if (sunX + 70 >= viewL && sunX - 70 <= viewR) {
+        this.ctx.fillStyle = '#ffedd5';
+        this.ctx.beginPath();
+        this.ctx.arc(sunX, 300, 70, 0, Math.PI * 2);
+        this.ctx.fill();
+        this.ctx.fillStyle = '#fdba74'; // orange sun glow
+        this.ctx.beginPath();
+        this.ctx.arc(sunX, 300, 50, 0, Math.PI * 2);
+        this.ctx.fill();
+      }
 
       // Draw clouds (scrolling slow parallax)
       const cloudSpacing = 800;
       this.ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-      for (let cx = 150; cx < l.width; cx += cloudSpacing) {
+      const startCloud = Math.floor((viewL - l.width) / cloudSpacing) * cloudSpacing;
+      for (let cx = Math.max(150, startCloud); cx < viewR + cloudSpacing; cx += cloudSpacing) {
         const px = cx + camX * 0.15; // slow scroll
-        this.ctx.beginPath();
-        this.ctx.arc(px, 120, 25, 0, Math.PI * 2);
-        this.ctx.arc(px + 35, 105, 35, 0, Math.PI * 2);
-        this.ctx.arc(px + 70, 120, 25, 0, Math.PI * 2);
-        this.ctx.closePath();
-        this.ctx.fill();
+        if (px + 100 >= viewL && px - 30 <= viewR) {
+          this.ctx.beginPath();
+          this.ctx.arc(px, 120, 25, 0, Math.PI * 2);
+          this.ctx.arc(px + 35, 105, 35, 0, Math.PI * 2);
+          this.ctx.arc(px + 70, 120, 25, 0, Math.PI * 2);
+          this.ctx.closePath();
+          this.ctx.fill();
+        }
       }
 
-      // Draw background tree silhouettes peeking
+      // Draw background tree silhouettes peeking (viewport optimized)
       this.ctx.fillStyle = '#14532d'; // very dark forest green
       const treeSpacing = 280;
-      for (let tx = 100; tx < l.width; tx += treeSpacing) {
+      const startTree = Math.floor(viewL / treeSpacing) * treeSpacing;
+      for (let tx = Math.max(100, startTree); tx < viewR && tx < l.width; tx += treeSpacing) {
         this.ctx.beginPath();
         this.ctx.moveTo(tx, 480);
         this.ctx.lineTo(tx + 60, 240);
@@ -1837,14 +1849,15 @@ class Game {
         this.ctx.fill();
       }
 
-      // Draw wooden garden fence
+      // Draw wooden garden fence (viewport optimized)
       this.ctx.fillStyle = '#b45309'; // warm wood fence slats
       this.ctx.strokeStyle = '#78350f';
       this.ctx.lineWidth = 1;
       const fenceW = 16;
       const fenceH = 120;
       const fenceY = 360;
-      for (let fx = 0; fx < l.width; fx += fenceW + 4) {
+      const startFence = Math.floor(viewL / (fenceW + 4)) * (fenceW + 4);
+      for (let fx = Math.max(0, startFence); fx < viewR && fx < l.width; fx += fenceW + 4) {
         this.ctx.beginPath();
         this.ctx.moveTo(fx, fenceY + fenceH);
         this.ctx.lineTo(fx, fenceY + 12);
@@ -1858,19 +1871,20 @@ class Game {
       
       // Horizontal fence support beams
       this.ctx.fillStyle = '#78350f';
-      this.ctx.fillRect(0, fenceY + 30, l.width, 8);
-      this.ctx.fillRect(0, fenceY + fenceH - 30, l.width, 8);
+      this.ctx.fillRect(Math.max(0, viewL), fenceY + 30, viewR - Math.max(0, viewL), 8);
+      this.ctx.fillRect(Math.max(0, viewL), fenceY + fenceH - 30, viewR - Math.max(0, viewL), 8);
 
     } else if (theme === 'attic') {
       // Dusty brown/grey wood paneling or brick wall
       this.ctx.fillStyle = '#292524'; // very dark brick/wood stone wall
-      this.ctx.fillRect(0, 0, l.width, 480);
+      this.ctx.fillRect(Math.max(0, viewL), 0, viewR - Math.max(0, viewL), 480);
 
       // Draw wood planks background panels
       this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
       this.ctx.lineWidth = 1;
       const step = 90;
-      for (let x = 0; x < l.width; x += step) {
+      const startPlank = Math.floor(viewL / step) * step;
+      for (let x = Math.max(0, startPlank); x < viewR && x < l.width; x += step) {
         this.ctx.beginPath();
         this.ctx.moveTo(x, 0);
         this.ctx.lineTo(x, 480);
@@ -1879,7 +1893,8 @@ class Game {
 
       // Draw Sloped Roof lines (attic rafters ceiling triangles)
       this.ctx.fillStyle = '#1c1917'; // pitch black ceiling beams
-      for (let rx = -200; rx < l.width; rx += 400) {
+      const startRafter = Math.floor(viewL / 400) * 400 - 400;
+      for (let rx = startRafter; rx < viewR && rx < l.width; rx += 400) {
         this.ctx.beginPath();
         this.ctx.moveTo(rx, 0);
         this.ctx.lineTo(rx + 200, 100);
@@ -1895,7 +1910,8 @@ class Game {
       // Cobwebs in top rafters corners
       this.ctx.strokeStyle = 'rgba(255,255,255,0.08)';
       this.ctx.lineWidth = 1;
-      for (let wx = 300; wx < l.width; wx += 800) {
+      const startWeb = Math.floor(viewL / 800) * 800;
+      for (let wx = Math.max(300, startWeb); wx < viewR && wx < l.width; wx += 800) {
         this.ctx.beginPath();
         this.ctx.moveTo(wx, 0);
         this.ctx.lineTo(wx + 30, 25);
@@ -1909,15 +1925,15 @@ class Game {
     } else if (theme === 'gameroom') {
       // Dark arcade wall with glowing neon vectors
       this.ctx.fillStyle = '#0f172a'; // slate blue-black
-      this.ctx.fillRect(0, 0, l.width, 480);
+      this.ctx.fillRect(Math.max(0, viewL), 0, viewR - Math.max(0, viewL), 480);
 
       // Neon grid lines
       this.ctx.strokeStyle = 'rgba(139, 92, 246, 0.15)'; // glowing violet
       this.ctx.lineWidth = 2;
       const step = 80;
       
-      const startDrawX = Math.floor(camX / step) * step;
-      const endDrawX = startDrawX + this.gameWidth + step;
+      const startDrawX = Math.floor(viewL / step) * step;
+      const endDrawX = startDrawX + this.gameWidth + step * 2;
       
       for (let x = startDrawX; x < endDrawX; x += step) {
         this.ctx.beginPath();
@@ -1931,8 +1947,8 @@ class Game {
       let hStep = 10;
       while (hy < 480) {
         this.ctx.beginPath();
-        this.ctx.moveTo(0, hy);
-        this.ctx.lineTo(l.width, hy);
+        this.ctx.moveTo(Math.max(0, viewL), hy);
+        this.ctx.lineTo(Math.min(l.width, viewR), hy);
         this.ctx.stroke();
         hStep *= 1.35;
         hy += hStep;
@@ -1944,7 +1960,8 @@ class Game {
       this.ctx.shadowColor = '#06b6d4'; // glowing cyan
       this.ctx.strokeStyle = '#06b6d4';
       this.ctx.lineWidth = 4;
-      for (let nx = 500; nx < l.width; nx += 1000) {
+      const startBone = Math.floor(viewL / 1000) * 1000;
+      for (let nx = Math.max(500, startBone); nx < viewR && nx < l.width; nx += 1000) {
         this.ctx.beginPath();
         this.ctx.arc(nx - 15, 100, 8, 0.5 * Math.PI, 1.5 * Math.PI);
         this.ctx.arc(nx - 15, 84, 8, 0.5 * Math.PI, 1.5 * Math.PI);
@@ -1960,21 +1977,23 @@ class Game {
     } else if (theme === 'basement') {
       // Cold concrete stone brick wall
       this.ctx.fillStyle = '#374151'; // cool grey
-      this.ctx.fillRect(0, 0, l.width, 480);
+      this.ctx.fillRect(Math.max(0, viewL), 0, viewR - Math.max(0, viewL), 480);
 
       // Stone brick lines
       this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
       this.ctx.lineWidth = 2;
       const brickW = 120;
       const brickH = 40;
+      const startBrickX = Math.floor(viewL / brickW) * brickW;
       for (let y = 0; y < 480; y += brickH) {
         this.ctx.beginPath();
-        this.ctx.moveTo(0, y);
-        this.ctx.lineTo(l.width, y);
+        this.ctx.moveTo(Math.max(0, viewL), y);
+        this.ctx.lineTo(Math.min(l.width, viewR), y);
         this.ctx.stroke();
         
         const shiftX = (y % (brickH * 2) === 0) ? 0 : brickW / 2;
-        for (let x = shiftX; x < l.width; x += brickW) {
+        const startX = Math.floor((viewL - shiftX) / brickW) * brickW + shiftX;
+        for (let x = Math.max(shiftX, startX); x < viewR && x < l.width; x += brickW) {
           this.ctx.beginPath();
           this.ctx.moveTo(x, y);
           this.ctx.lineTo(x, y + brickH);
@@ -1984,12 +2003,13 @@ class Game {
 
       // Draw metallic pipes along top
       this.ctx.fillStyle = '#6b7280';
-      this.ctx.fillRect(0, 30, l.width, 16);
+      this.ctx.fillRect(Math.max(0, viewL), 30, viewR - Math.max(0, viewL), 16);
       this.ctx.strokeStyle = '#1f2937';
       this.ctx.lineWidth = 2;
-      this.ctx.strokeRect(0, 30, l.width, 16);
+      this.ctx.strokeRect(Math.max(0, viewL), 30, viewR - Math.max(0, viewL), 16);
       
-      for (let px = 800; px < l.width; px += 1200) {
+      const startPipe = Math.floor(viewL / 1200) * 1200;
+      for (let px = Math.max(800, startPipe); px < viewR && px < l.width; px += 1200) {
         this.ctx.fillStyle = '#4b5563';
         this.ctx.fillRect(px, 24, 10, 28);
         this.ctx.strokeRect(px, 24, 10, 28);
@@ -2011,20 +2031,31 @@ class Game {
     } else if (theme === 'library') {
       // Bookshelf background filling the library
       this.ctx.fillStyle = '#7c2d12'; // deep mahogany wall
-      this.ctx.fillRect(0, 0, l.width, 480);
+      this.ctx.fillRect(Math.max(0, viewL), 0, viewR - Math.max(0, viewL), 480);
       
       this.ctx.fillStyle = '#451a03';
       const shelfH = 70;
       for (let y = 30; y < 480; y += shelfH) {
-        this.ctx.fillRect(0, y, l.width, 6); // shelf lines
+        this.ctx.fillRect(Math.max(0, viewL), y, viewR - Math.max(0, viewL), 6); // shelf lines
         
         this.ctx.save();
         const colors = ['#b91c1c', '#1d4ed8', '#047857', '#b45309', '#6d28d9', '#4b5563'];
-        let bx = 30;
-        while (bx < l.width - 40) {
-          const bh = 30 + Math.random() * 25;
-          const bw = 8 + Math.random() * 10;
-          this.ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Start bx near viewL, end bx near viewR to make rendering super fast
+        const startBx = Math.floor(viewL / 15) * 15;
+        let bx = Math.max(30, startBx);
+        const endBx = Math.min(l.width - 40, viewR);
+        
+        while (bx < endBx) {
+          // Use deterministic pseudo-random values based on bx coordinate to prevent flickering!
+          const pseudoSeed = Math.sin(bx * 12.9898 + y * 78.233) * 43758.5453;
+          const randomVal1 = pseudoSeed - Math.floor(pseudoSeed);
+          const randomVal2 = (pseudoSeed * 10) - Math.floor(pseudoSeed * 10);
+          const randomVal3 = (pseudoSeed * 100) - Math.floor(pseudoSeed * 100);
+
+          const bh = 30 + randomVal1 * 25;
+          const bw = 8 + randomVal2 * 10;
+          this.ctx.fillStyle = colors[Math.floor(randomVal3 * colors.length)];
           this.ctx.fillRect(bx, y - bh, bw, bh);
           
           this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
@@ -2042,7 +2073,7 @@ class Game {
     } else {
       // DEFAULT DOMESTIC ROOMS: living-room, kitchen, hallway, bedroom
       this.ctx.fillStyle = l.background;
-      this.ctx.fillRect(0, 0, l.width, 480);
+      this.ctx.fillRect(Math.max(0, viewL), 0, viewR - Math.max(0, viewL), 480);
 
       this.ctx.save();
       this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.04)';
@@ -2050,9 +2081,9 @@ class Game {
       
       if (l.wallpaperPattern === 'stripes-vertical') {
         const step = 60;
-        const startDrawX = Math.floor(camX / step) * step;
-        const endDrawX = startDrawX + this.gameWidth + step;
-        for (let x = startDrawX; x < endDrawX; x += step) {
+        const startDrawX = Math.floor(viewL / step) * step;
+        const endDrawX = startDrawX + this.gameWidth + step * 2;
+        for (let x = Math.max(0, startDrawX); x < endDrawX && x < l.width; x += step) {
           this.ctx.beginPath();
           this.ctx.moveTo(x, 0);
           this.ctx.lineTo(x, 480);
@@ -2060,9 +2091,9 @@ class Game {
         }
       } else if (l.wallpaperPattern === 'checkered') {
         const step = 80;
-        const startDrawX = Math.floor(camX / step) * step;
-        const endDrawX = startDrawX + this.gameWidth + step;
-        for (let x = startDrawX; x < endDrawX; x += step) {
+        const startDrawX = Math.floor(viewL / step) * step;
+        const endDrawX = startDrawX + this.gameWidth + step * 2;
+        for (let x = Math.max(0, startDrawX); x < endDrawX && x < l.width; x += step) {
           for (let y = 0; y < 480; y += step) {
             this.ctx.strokeRect(x, y, step, step);
           }
@@ -2072,8 +2103,8 @@ class Game {
         this.ctx.lineWidth = 1;
         for (let y = 0; y < 480; y += step) {
           this.ctx.beginPath();
-          this.ctx.moveTo(0, y);
-          this.ctx.lineTo(l.width, y);
+          this.ctx.moveTo(Math.max(0, viewL), y);
+          this.ctx.lineTo(Math.min(l.width, viewR), y);
           this.ctx.stroke();
         }
       }
@@ -2081,10 +2112,11 @@ class Game {
 
       if (theme === 'kitchen') {
         this.ctx.fillStyle = 'rgba(0,0,0,0.05)';
-        this.ctx.fillRect(0, 280, l.width, 80);
+        this.ctx.fillRect(Math.max(0, viewL), 280, viewR - Math.max(0, viewL), 80);
         this.ctx.strokeStyle = 'rgba(0,0,0,0.08)';
         this.ctx.lineWidth = 1;
-        for (let tx = 0; tx < l.width; tx += 20) {
+        const startTile = Math.floor(viewL / 20) * 20;
+        for (let tx = Math.max(0, startTile); tx < viewR && tx < l.width; tx += 20) {
           this.ctx.beginPath();
           this.ctx.moveTo(tx, 280);
           this.ctx.lineTo(tx, 360);
@@ -2092,20 +2124,21 @@ class Game {
         }
         for (let ty = 280; ty <= 360; ty += 20) {
           this.ctx.beginPath();
-          this.ctx.moveTo(0, ty);
-          this.ctx.lineTo(l.width, ty);
+          this.ctx.moveTo(Math.max(0, viewL), ty);
+          this.ctx.lineTo(Math.min(l.width, viewR), ty);
           this.ctx.stroke();
         }
       } else if (theme === 'hallway') {
         this.ctx.fillStyle = '#b45309';
-        this.ctx.fillRect(0, 330, l.width, 150);
+        this.ctx.fillRect(Math.max(0, viewL), 330, viewR - Math.max(0, viewL), 150);
         this.ctx.strokeStyle = '#78350f';
         this.ctx.lineWidth = 2;
-        this.ctx.strokeRect(0, 330, l.width, 150);
+        this.ctx.strokeRect(Math.max(0, viewL), 330, viewR - Math.max(0, viewL), 150);
         
         this.ctx.strokeStyle = 'rgba(0,0,0,0.15)';
         this.ctx.lineWidth = 1;
-        for (let sx = 0; sx < l.width; sx += 30) {
+        const startSlat = Math.floor(viewL / 30) * 30;
+        for (let sx = Math.max(0, startSlat); sx < viewR && sx < l.width; sx += 30) {
           this.ctx.beginPath();
           this.ctx.moveTo(sx, 330);
           this.ctx.lineTo(sx, 480);
@@ -2114,7 +2147,8 @@ class Game {
       }
 
       const windowSpacing = 900;
-      for (let wx = 400; wx < l.width - 400; wx += windowSpacing) {
+      const startWin = Math.floor(viewL / windowSpacing) * windowSpacing;
+      for (let wx = Math.max(400, startWin); wx < viewR && wx < l.width - 400; wx += windowSpacing) {
         this.ctx.save();
         
         this.ctx.fillStyle = '#bae6fd';
@@ -2163,12 +2197,13 @@ class Game {
     // --------------------------------------------------
     if (theme === 'patio') {
       this.ctx.fillStyle = '#22c55e'; // vivid lawn green
-      this.ctx.fillRect(0, 480, l.width, 60);
+      this.ctx.fillRect(Math.max(0, viewL), 480, viewR - Math.max(0, viewL), 60);
 
       this.ctx.strokeStyle = 'rgba(21, 128, 61, 0.2)';
       this.ctx.lineWidth = 2;
       const stoneStep = 40;
-      for (let fx = 0; fx < l.width + stoneStep; fx += stoneStep) {
+      const startStone = Math.floor(viewL / stoneStep) * stoneStep;
+      for (let fx = Math.max(0, startStone); fx < viewR && fx < l.width + stoneStep; fx += stoneStep) {
         this.ctx.beginPath();
         this.ctx.arc(fx, 510, 12, 0, Math.PI * 2);
         this.ctx.stroke();
@@ -2178,7 +2213,8 @@ class Game {
       }
       
       this.ctx.fillStyle = '#16a34a';
-      for (let gx = 0; gx < l.width; gx += 16) {
+      const startGrass = Math.floor(viewL / 16) * 16;
+      for (let gx = Math.max(0, startGrass); gx < viewR && gx < l.width; gx += 16) {
         this.ctx.beginPath();
         this.ctx.moveTo(gx, 480);
         this.ctx.lineTo(gx + 3, 472);
@@ -2187,30 +2223,32 @@ class Game {
       }
       
       this.ctx.fillStyle = '#15803d';
-      this.ctx.fillRect(0, 475, l.width, 5);
+      this.ctx.fillRect(Math.max(0, viewL), 475, viewR - Math.max(0, viewL), 5);
 
     } else if (theme === 'bedroom' || theme === 'library') {
       this.ctx.fillStyle = (theme === 'library') ? '#7f1d1d' : '#818cf8';
-      this.ctx.fillRect(0, 480, l.width, 60);
+      this.ctx.fillRect(Math.max(0, viewL), 480, viewR - Math.max(0, viewL), 60);
 
       this.ctx.fillStyle = (theme === 'library') ? '#991b1b' : '#c7d2fe';
-      for (let cx = 0; cx < l.width; cx += 25) {
+      const startCarpet = Math.floor(viewL / 25) * 25;
+      for (let cx = Math.max(0, startCarpet); cx < viewR && cx < l.width; cx += 25) {
         this.ctx.fillRect(cx + (cx % 3)*4, 490 + (cx % 5)*7, 3, 3);
         this.ctx.fillRect(cx - (cx % 5)*2, 510 + (cx % 3)*6, 3, 3);
       }
 
       this.ctx.fillStyle = '#cbd5e1';
-      this.ctx.fillRect(0, 470, l.width, 10);
+      this.ctx.fillRect(Math.max(0, viewL), 470, viewR - Math.max(0, viewL), 10);
       this.ctx.fillStyle = '#e2e8f0';
-      this.ctx.fillRect(0, 467, l.width, 3);
+      this.ctx.fillRect(Math.max(0, viewL), 467, viewR - Math.max(0, viewL), 3);
 
     } else if (theme === 'basement') {
       this.ctx.fillStyle = '#4b5563';
-      this.ctx.fillRect(0, 480, l.width, 60);
+      this.ctx.fillRect(Math.max(0, viewL), 480, viewR - Math.max(0, viewL), 60);
 
       this.ctx.strokeStyle = '#1f2937';
       this.ctx.lineWidth = 3;
-      for (let bx = 300; bx < l.width; bx += 400) {
+      const startLine = Math.floor(viewL / 400) * 400;
+      for (let bx = Math.max(300, startLine); bx < viewR && bx < l.width; bx += 400) {
         this.ctx.beginPath();
         this.ctx.moveTo(bx, 480);
         this.ctx.lineTo(bx - 30, 540);
@@ -2218,16 +2256,17 @@ class Game {
       }
 
       this.ctx.fillStyle = '#111827';
-      this.ctx.fillRect(0, 470, l.width, 10);
+      this.ctx.fillRect(Math.max(0, viewL), 470, viewR - Math.max(0, viewL), 10);
 
     } else if (theme === 'kitchen') {
       this.ctx.fillStyle = '#e2e8f0';
-      this.ctx.fillRect(0, 480, l.width, 60);
+      this.ctx.fillRect(Math.max(0, viewL), 480, viewR - Math.max(0, viewL), 60);
 
       this.ctx.strokeStyle = '#94a3b8';
       this.ctx.lineWidth = 2;
       const tileW = 40;
-      for (let tx = 0; tx < l.width; tx += tileW) {
+      const startTile = Math.floor(viewL / tileW) * tileW;
+      for (let tx = Math.max(0, startTile); tx < viewR && tx < l.width; tx += tileW) {
         if ((tx / tileW) % 2 === 0) {
           this.ctx.fillStyle = '#64748b';
           this.ctx.fillRect(tx, 480, tileW, 30);
@@ -2239,31 +2278,31 @@ class Game {
       
       this.ctx.strokeStyle = '#334155';
       this.ctx.beginPath();
-      this.ctx.moveTo(0, 510);
-      this.ctx.lineTo(l.width, 510);
+      this.ctx.moveTo(Math.max(0, viewL), 510);
+      this.ctx.lineTo(Math.min(l.width, viewR), 510);
       this.ctx.stroke();
-      this.ctx.strokeRect(0, 480, l.width, 60);
+      this.ctx.strokeRect(Math.max(0, viewL), 480, viewR - Math.max(0, viewL), 60);
 
       this.ctx.fillStyle = '#475569';
-      this.ctx.fillRect(0, 470, l.width, 10);
+      this.ctx.fillRect(Math.max(0, viewL), 470, viewR - Math.max(0, viewL), 10);
 
     } else {
       this.ctx.fillStyle = l.floorColor;
-      this.ctx.fillRect(0, 480, l.width, 60);
+      this.ctx.fillRect(Math.max(0, viewL), 480, viewR - Math.max(0, viewL), 60);
 
       this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
       this.ctx.lineWidth = 2;
       for (let fy = 495; fy < 540; fy += 15) {
         this.ctx.beginPath();
-        this.ctx.moveTo(0, fy);
-        this.ctx.lineTo(l.width, fy);
+        this.ctx.moveTo(Math.max(0, viewL), fy);
+        this.ctx.lineTo(Math.min(l.width, viewR), fy);
         this.ctx.stroke();
       }
 
       this.ctx.fillStyle = '#451a03';
-      this.ctx.fillRect(0, 465, l.width, 15);
+      this.ctx.fillRect(Math.max(0, viewL), 465, viewR - Math.max(0, viewL), 15);
       this.ctx.fillStyle = '#cbd5e1';
-      this.ctx.fillRect(0, 477, l.width, 3);
+      this.ctx.fillRect(Math.max(0, viewL), 477, viewR - Math.max(0, viewL), 3);
     }
   }
 
@@ -2271,6 +2310,12 @@ class Game {
     const theme = this.levelData ? (this.levelData.theme || 'living-room') : 'living-room';
     
     this.platforms.forEach(plat => {
+      // Offscreen clipping optimization
+      if (this.camX !== undefined) {
+        if (plat.x + plat.width < this.camX - 100 || plat.x > this.camX + this.gameWidth + 100) {
+          return;
+        }
+      }
       this.ctx.save();
       
       const x = plat.x;
@@ -2796,6 +2841,12 @@ class Game {
   drawLaundry() {
     const time = Date.now() * 0.003;
     this.laundry.forEach(item => {
+      // Offscreen clipping optimization
+      if (this.camX !== undefined) {
+        if (item.x < this.camX - 50 || item.x > this.camX + this.gameWidth + 50) {
+          return;
+        }
+      }
       this.ctx.save();
       
       // Bobbing up and down effect
@@ -2873,6 +2924,12 @@ class Game {
     const time = Date.now() * 0.003;
     
     this.treats.forEach(treat => {
+      // Offscreen clipping optimization
+      if (this.camX !== undefined) {
+        if (treat.x < this.camX - 50 || treat.x > this.camX + this.gameWidth + 50) {
+          return;
+        }
+      }
       this.ctx.save();
       
       const bob = Math.sin(time * 2.0 + treat.x) * 5;
@@ -2936,6 +2993,12 @@ class Game {
   drawHazards() {
     const time = Date.now() * 0.003;
     this.hazards.forEach(hz => {
+      // Offscreen clipping optimization
+      if (this.camX !== undefined) {
+        if (hz.x < this.camX - 50 || hz.x > this.camX + this.gameWidth + 50) {
+          return;
+        }
+      }
       this.ctx.save();
       this.ctx.translate(hz.x, hz.y);
 
