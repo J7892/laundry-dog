@@ -508,8 +508,52 @@ class Game {
     this.gameHeight = height;
   }
 
-  // Bind Keyboard controls
   initInputs() {
+    // Setup window resize scaling
+    this.resizeGame();
+    window.addEventListener('resize', () => this.resizeGame());
+    
+    // Auto detect touch support to toggle overlay
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const mobileOverlay = document.getElementById('mobile-controls');
+    if (isTouch && mobileOverlay) {
+      mobileOverlay.classList.remove('hidden');
+    }
+
+    // Virtual touch control bindings
+    const setupVirtualKey = (btnId, keyCodes) => {
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
+
+      const handlePress = (e) => {
+        e.preventDefault();
+        keyCodes.forEach(code => {
+          this.keys[code] = true;
+        });
+      };
+
+      const handleRelease = (e) => {
+        e.preventDefault();
+        keyCodes.forEach(code => {
+          this.keys[code] = false;
+        });
+      };
+
+      btn.addEventListener('touchstart', handlePress, { passive: false });
+      btn.addEventListener('touchend', handleRelease, { passive: false });
+      btn.addEventListener('touchcancel', handleRelease, { passive: false });
+
+      // Mouse compatibility fallback for dev tools / touch-monitors
+      btn.addEventListener('mousedown', handlePress);
+      btn.addEventListener('mouseup', handleRelease);
+      btn.addEventListener('mouseleave', handleRelease);
+    };
+
+    setupVirtualKey('btn-left', ['ArrowLeft', 'KeyA']);
+    setupVirtualKey('btn-right', ['ArrowRight', 'KeyD']);
+    setupVirtualKey('btn-jump', ['ArrowUp', 'KeyW', 'Space']);
+    setupVirtualKey('btn-duck', ['ArrowDown', 'KeyS']);
+
     window.addEventListener('keydown', (e) => {
       // Prevent scrolling keys in browser
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
@@ -526,6 +570,26 @@ class Game {
     window.addEventListener('keyup', (e) => {
       this.keys[e.code] = false;
     });
+  }
+
+  // Scale container to fit viewport while keeping 16:9 aspect ratio
+  resizeGame() {
+    const container = document.getElementById('game-container');
+    if (!container) return;
+
+    const w = 960;
+    const h = 540;
+    const padding = 12; // edge safety buffer
+    const windowW = window.innerWidth - padding;
+    const windowH = window.innerHeight - padding;
+
+    // Calculate scaling ratio
+    const scaleX = windowW / w;
+    const scaleY = windowH / h;
+    const scale = Math.min(scaleX, scaleY, 1.0); // clamp to max 1.0
+
+    // Apply scaling centered
+    container.style.transform = `translate(-50%, -50%) scale(${scale})`;
   }
 
   // Bind HTML buttons
@@ -2041,13 +2105,12 @@ class Game {
         this.ctx.save();
         const colors = ['#b91c1c', '#1d4ed8', '#047857', '#b45309', '#6d28d9', '#4b5563'];
         
-        // Start bx near viewL, end bx near viewR to make rendering super fast
-        const startBx = Math.floor(viewL / 15) * 15;
-        let bx = Math.max(30, startBx);
+        // ALWAYS start generating books at the beginning of the shelf (x=30) to prevent offsets shifting
+        let bx = 30;
         const endBx = Math.min(l.width - 40, viewR);
         
         while (bx < endBx) {
-          // Use deterministic pseudo-random values based on bx coordinate to prevent flickering!
+          // Use deterministic pseudo-random values based on absolute bx coordinate
           const pseudoSeed = Math.sin(bx * 12.9898 + y * 78.233) * 43758.5453;
           const randomVal1 = pseudoSeed - Math.floor(pseudoSeed);
           const randomVal2 = (pseudoSeed * 10) - Math.floor(pseudoSeed * 10);
@@ -2055,15 +2118,26 @@ class Game {
 
           const bh = 30 + randomVal1 * 25;
           const bw = 8 + randomVal2 * 10;
-          this.ctx.fillStyle = colors[Math.floor(randomVal3 * colors.length)];
-          this.ctx.fillRect(bx, y - bh, bw, bh);
           
-          this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-          this.ctx.lineWidth = 1;
-          this.ctx.beginPath();
-          this.ctx.moveTo(bx + bw/2, y - bh + 4);
-          this.ctx.lineTo(bx + bw/2, y - 4);
-          this.ctx.stroke();
+          // Only perform canvas drawing if the book falls inside the viewport
+          if (bx + bw >= viewL) {
+            this.ctx.fillStyle = colors[Math.floor(randomVal3 * colors.length)];
+            this.ctx.fillRect(bx, y - bh, bw, bh);
+            
+            // Draw gold foil band near top of book spine to make them look like classic leather books
+            if (bh > 38 && bw > 11) {
+              this.ctx.fillStyle = '#fbbf24'; // Gold band
+              this.ctx.fillRect(bx + 1.5, y - bh + 5, bw - 3, 2);
+            }
+            
+            // Spine lines / highlights
+            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            this.ctx.lineWidth = 1;
+            this.ctx.beginPath();
+            this.ctx.moveTo(bx + bw/2, y - bh + 4);
+            this.ctx.lineTo(bx + bw/2, y - 4);
+            this.ctx.stroke();
+          }
           
           bx += bw + 3;
         }
