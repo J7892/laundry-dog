@@ -520,7 +520,140 @@ class Game {
       mobileOverlay.classList.remove('hidden');
     }
 
-    // Virtual touch control bindings
+    // Control mode toggle binding (D-Pad vs Joystick)
+    this.controlMode = 'DPAD';
+    const dpadEl = document.getElementById('mobile-dpad');
+    const joystickEl = document.getElementById('mobile-joystick');
+    const toggleBtn = document.getElementById('btn-control-toggle');
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (this.controlMode === 'DPAD') {
+          this.controlMode = 'JOYSTICK';
+          toggleBtn.textContent = '🎮 Toggle D-PAD';
+          dpadEl.classList.add('hidden');
+          joystickEl.classList.remove('hidden');
+        } else {
+          this.controlMode = 'DPAD';
+          toggleBtn.textContent = '🕹️ Toggle Joystick';
+          dpadEl.classList.remove('hidden');
+          joystickEl.classList.add('hidden');
+        }
+        // Reset direction keys
+        this.keys['ArrowLeft'] = false;
+        this.keys['KeyA'] = false;
+        this.keys['ArrowRight'] = false;
+        this.keys['KeyD'] = false;
+      });
+    }
+
+    // Joystick touch tracking
+    const jBase = document.getElementById('joystick-base');
+    const jKnob = document.getElementById('joystick-knob');
+    if (jBase && jKnob) {
+      let activeTouchId = null;
+
+      const handleJoystickStart = (e) => {
+        e.preventDefault();
+        if (activeTouchId !== null) return;
+        const touch = e.changedTouches[0];
+        activeTouchId = touch.identifier;
+        updateJoystick(touch);
+      };
+
+      const handleJoystickMove = (e) => {
+        if (activeTouchId === null) return;
+        for (let i = 0; i < e.touches.length; i++) {
+          if (e.touches[i].identifier === activeTouchId) {
+            e.preventDefault();
+            updateJoystick(e.touches[i]);
+            break;
+          }
+        }
+      };
+
+      const handleJoystickEnd = (e) => {
+        if (activeTouchId === null) return;
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          if (e.changedTouches[i].identifier === activeTouchId) {
+            e.preventDefault();
+            activeTouchId = null;
+            resetJoystick();
+            break;
+          }
+        }
+      };
+
+      const updateJoystick = (touch) => {
+        const rect = jBase.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        let dx = touch.clientX - centerX;
+        let dy = touch.clientY - centerY;
+        
+        const maxRadius = 38; // limit knob displacement in px
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        
+        if (dist > maxRadius) {
+          dx = (dx / dist) * maxRadius;
+          dy = (dy / dist) * maxRadius;
+        }
+
+        jKnob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+
+        // Direct movement input updates based on horizontal axis (dx)
+        const threshold = 12; // deadzone
+        if (dx < -threshold) {
+          this.keys['ArrowLeft'] = true;
+          this.keys['KeyA'] = true;
+          this.keys['ArrowRight'] = false;
+          this.keys['KeyD'] = false;
+        } else if (dx > threshold) {
+          this.keys['ArrowRight'] = true;
+          this.keys['KeyD'] = true;
+          this.keys['ArrowLeft'] = false;
+          this.keys['KeyA'] = false;
+        } else {
+          this.keys['ArrowLeft'] = false;
+          this.keys['KeyA'] = false;
+          this.keys['ArrowRight'] = false;
+          this.keys['KeyD'] = false;
+        }
+      };
+
+      const resetJoystick = () => {
+        jKnob.style.transform = 'translate(-50%, -50%)';
+        this.keys['ArrowLeft'] = false;
+        this.keys['KeyA'] = false;
+        this.keys['ArrowRight'] = false;
+        this.keys['KeyD'] = false;
+      };
+
+      jBase.addEventListener('touchstart', handleJoystickStart, { passive: false });
+      window.addEventListener('touchmove', handleJoystickMove, { passive: false });
+      window.addEventListener('touchend', handleJoystickEnd, { passive: false });
+      window.addEventListener('touchcancel', handleJoystickEnd, { passive: false });
+      
+      // Mouse backup for testing in desktop responsive mode
+      let isMouseDown = false;
+      jBase.addEventListener('mousedown', (e) => {
+        isMouseDown = true;
+        updateJoystick(e);
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (isMouseDown) updateJoystick(e);
+      });
+      window.addEventListener('mouseup', () => {
+        if (isMouseDown) {
+          isMouseDown = false;
+          resetJoystick();
+        }
+      });
+    }
+
+    // Virtual touch control bindings for D-Pad Left/Right and JUMP/DUCK
     const setupVirtualKey = (btnId, keyCodes) => {
       const btn = document.getElementById(btnId);
       if (!btn) return;
@@ -543,7 +676,6 @@ class Game {
       btn.addEventListener('touchend', handleRelease, { passive: false });
       btn.addEventListener('touchcancel', handleRelease, { passive: false });
 
-      // Mouse compatibility fallback for dev tools / touch-monitors
       btn.addEventListener('mousedown', handlePress);
       btn.addEventListener('mouseup', handleRelease);
       btn.addEventListener('mouseleave', handleRelease);

@@ -231,13 +231,26 @@
     
     <!-- Mobile Controller Overlay -->
     <div id="mobile-controls" class="hidden">
-      <div class="control-group left-controls">
-        <button id="btn-left" class="control-btn">◀</button>
-        <button id="btn-right" class="control-btn">▶</button>
+      <!-- Mode Toggle Button -->
+      <button id="btn-control-toggle" class="control-toggle-btn">🕹️ Toggle Joystick</button>
+
+      <!-- Control Area Left: D-Pad Buttons -->
+      <div id="mobile-dpad" class="control-group left-controls">
+        <button id="btn-left" class="control-btn dpad-btn">◀</button>
+        <button id="btn-right" class="control-btn dpad-btn">▶</button>
       </div>
+
+      <!-- Control Area Left: Virtual Joystick -->
+      <div id="mobile-joystick" class="control-group left-controls hidden">
+        <div id="joystick-base">
+          <div id="joystick-knob"></div>
+        </div>
+      </div>
+
+      <!-- Control Area Right: Jump & Duck (Text buttons) -->
       <div class="control-group right-controls">
-        <button id="btn-duck" class="control-btn">▼</button>
-        <button id="btn-jump" class="control-btn">▲</button>
+        <button id="btn-duck" class="control-btn action-btn text-btn">DUCK</button>
+        <button id="btn-jump" class="control-btn action-btn text-btn">JUMP</button>
       </div>
     </div>
   </div>

@@ -7,6 +7,8 @@ import json
 import os
 import re
 import logging
+import io
+import pypdf
 
 # Configure logging
 logging.basicConfig(
@@ -73,6 +75,8 @@ REGULATORS = {
     }
 }
 
+MAID_KEYWORDS = ["maid", "medical assistance in dying", "assisted dying", "aide médicale à mourir"]
+
 DISCIPLINE_KEYWORDS = [
     "discipline", "sanction", "reprimand", "suspend", "suspension", 
     "revoke", "revocation", "caution", "supervision", "censure", 
@@ -80,9 +84,6 @@ DISCIPLINE_KEYWORDS = [
 ]
 
 def search_yahoo(query, max_pages=3):
-    """
-    Search Yahoo for a query and extract decoded target URLs and titles.
-    """
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
@@ -101,7 +102,6 @@ def search_yahoo(query, max_pages=3):
                 
             soup = BeautifulSoup(r.text, 'html.parser')
             
-            # Find all search result items
             items_found = 0
             for a in soup.find_all('a', href=True):
                 href = a['href']
@@ -109,28 +109,33 @@ def search_yahoo(query, max_pages=3):
                     m = re.search(r'/RU=([^/]+)', href)
                     if m:
                         target_url = urllib.parse.unquote(m.group(1))
-                        # Title element is usually within the same anchor or nearby h3
                         title = a.text.strip()
-                        # Clean up title if it's just the URL or empty
                         if not title or title.startswith('http'):
-                            # Try to find parent/sibling elements with text
                             parent_h3 = a.find_parent('h3')
                             if parent_h3:
                                 title = parent_h3.text.strip()
                         
+                        # Find snippet if available
+                        snippet = ""
+                        parent_div = a.find_parent('div')
+                        if parent_div:
+                            sibling_snippet = parent_div.find_next_sibling('div', class_='compText') or parent_div.find_next_sibling('div')
+                            if sibling_snippet:
+                                snippet = sibling_snippet.text.strip()
+                        
                         if target_url not in [res['url'] for res in results]:
                             results.append({
                                 "title": title,
-                                "url": target_url
+                                "url": target_url,
+                                "search_snippet": snippet
                             })
                             items_found += 1
             
             logging.info(f"Extracted {items_found} URLs from page {page + 1}")
             if items_found == 0:
-                # No more results or blocked
                 break
                 
-            time.sleep(2)  # Respectful delay between pages
+            time.sleep(2)
             
         except Exception as e:
             logging.error(f"Error during Yahoo Search page {page + 1}: {e}")
@@ -139,143 +144,175 @@ def search_yahoo(query, max_pages=3):
     return results
 
 def clean_html_text(html_content):
-    """
-    Remove scripts, styles, and other non-text HTML elements.
-    """
     soup = BeautifulSoup(html_content, 'html.parser')
-    for script in soup(["script", "style", "header", "footer", "nav"]):
+    for script in soup(["script", "style", "header", "footer", "nav", "aside"]):
         script.decompose()
     return soup.get_text(separator=' ')
 
-def inspect_page(url):
+def inspect_pdf(pdf_bytes):
+    try:
+        pdf_file = io.BytesIO(pdf_bytes)
+        reader = pypdf.PdfReader(pdf_file)
+        text = ""
+        for page in reader.pages:
+            t = page.extract_text()
+            if t:
+                text += t + "\n"
+        return text
+    except Exception as e:
+        logging.error(f"Error parsing PDF: {e}")
+        return ""
+
+def check_proximity_match(text, keywords_a, keywords_b, max_distance=300):
+    text_lower = text.lower()
+    # Normalize whitespace
+    text_lower = re.sub(r'\s+', ' ', text_lower)
+    
+    for kw_a in keywords_a:
+        pattern_a = r'\b' + re.escape(kw_a.lower()) + r'\b'
+        for m_a in re.finditer(pattern_a, text_lower):
+            start_a = m_a.start()
+            end_a = m_a.end()
+            
+            for kw_b in keywords_b:
+                pattern_b = r'\b' + re.escape(kw_b.lower()) + r'\b'
+                for m_b in re.finditer(pattern_b, text_lower):
+                    start_b = m_b.start()
+                    end_b = m_b.end()
+                    
+                    dist = min(abs(start_a - end_b), abs(start_b - end_a))
+                    if dist <= max_distance:
+                        # Extract snippet from original text around this match
+                        snippet_start = max(0, min(start_a, start_b) - 150)
+                        snippet_end = min(len(text), max(end_a, end_b) + 150)
+                        snippet = text[snippet_start:snippet_end].strip()
+                        snippet = re.sub(r'\s+', ' ', snippet)
+                        return True, f"Matched '{kw_a}' and '{kw_b}' within {dist} chars", f"... {snippet} ..."
+    return False, "", ""
+
+def inspect_page(url, search_snippet=""):
     """
-    Fetch and inspect target URL for MAID-related discipline content.
-    Returns (is_match, match_reason, snippet)
+    Fetch and inspect target URL for MAID-related discipline content using proximity matching.
     """
     headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Referer": "https://search.yahoo.com/"
     }
     
-    # Skip binary/pdf files for direct scraping if needed, but print warning
-    if url.lower().endswith('.pdf'):
-        logging.info(f"Skipping PDF content inspection directly: {url} (will treat snippet from search engine if available)")
-        return False, "PDF document (requires manual review)", ""
-        
     try:
         logging.info(f"Inspecting URL: {url}")
         r = requests.get(url, headers=headers, timeout=15)
-        if r.status_code != 200:
-            return False, f"HTTP status {r.status_code}", ""
-            
-        text = clean_html_text(r.text)
         
-        # Check for MAID keywords
-        maid_matches = []
-        for kw in ["maid", "medical assistance in dying", "assisted dying", "aide médicale à mourir"]:
-            if re.search(r'\b' + re.escape(kw) + r'\b', text, re.IGNORECASE):
-                maid_matches.append(kw)
-                
-        # Check for discipline keywords
-        discipline_matches = []
-        for kw in DISCIPLINE_KEYWORDS:
-            if re.search(r'\b' + re.escape(kw) + r'\b', text, re.IGNORECASE):
-                discipline_matches.append(kw)
-                
-        if maid_matches and discipline_matches:
-            # Extract snippet around first MAID match
-            snippet = ""
-            first_match = maid_matches[0]
-            match_idx = text.lower().find(first_match.lower())
-            if match_idx != -1:
-                start_idx = max(0, match_idx - 250)
-                end_idx = min(len(text), match_idx + len(first_match) + 250)
-                snippet = text[start_idx:end_idx].strip()
-                # Clean up multiple whitespaces
-                snippet = re.sub(r'\s+', ' ', snippet)
-                snippet = f"... {snippet} ..."
-                
-            reason = f"MAID matches: {maid_matches}; Discipline matches: {discipline_matches}"
+        # Check if we got blocked or failed
+        if r.status_code != 200:
+            # Try to fall back to the search snippet if we can
+            logging.warning(f"HTTP status {r.status_code} for {url}. Falling back to search snippet.")
+            if search_snippet:
+                is_match, reason, snippet = check_proximity_match(search_snippet, MAID_KEYWORDS, DISCIPLINE_KEYWORDS)
+                if is_match:
+                    return True, f"Search snippet matched (HTTP {r.status_code}): {reason}", snippet
+            return False, f"HTTP status {r.status_code} (No matching snippet)", ""
+            
+        content_type = r.headers.get('Content-Type', '').lower()
+        
+        # Determine if PDF
+        if url.lower().endswith('.pdf') or 'application/pdf' in content_type or r.content.startswith(b'%PDF'):
+            text = inspect_pdf(r.content)
+        else:
+            text = clean_html_text(r.text)
+            
+        if not text:
+            # Fall back to search snippet if no text could be extracted
+            if search_snippet:
+                is_match, reason, snippet = check_proximity_match(search_snippet, MAID_KEYWORDS, DISCIPLINE_KEYWORDS)
+                if is_match:
+                    return True, f"Search snippet matched (Empty page body): {reason}", snippet
+            return False, "Could not extract text from document", ""
+            
+        # Run proximity match check
+        is_match, reason, snippet = check_proximity_match(text, MAID_KEYWORDS, DISCIPLINE_KEYWORDS)
+        if is_match:
             return True, reason, snippet
             
-        return False, "Keywords not matched", ""
+        # Final fallback: check search snippet even if the full text didn't trigger a proximity match
+        if search_snippet:
+            is_match, reason, snippet = check_proximity_match(search_snippet, MAID_KEYWORDS, DISCIPLINE_KEYWORDS)
+            if is_match:
+                return True, f"Search snippet matched (Page body did not match): {reason}", snippet
+                
+        return False, "Keywords not matched in proximity", ""
         
     except Exception as e:
         logging.error(f"Error inspecting URL {url}: {e}")
+        # Try to fall back to the search snippet
+        if search_snippet:
+            is_match, reason, snippet = check_proximity_match(search_snippet, MAID_KEYWORDS, DISCIPLINE_KEYWORDS)
+            if is_match:
+                return True, f"Search snippet matched (Error during fetch): {reason}", snippet
         return False, f"Error: {e}", ""
 
 def main():
     all_findings = []
-    
-    # Store unique URLs to avoid double inspecting
     inspected_urls = set()
     
-    logging.info("Starting MAID physician discipline search across Canada...")
+    logging.info("Starting MAID physician discipline search across Canada (Proximity Edition)...")
     
     for province, info in REGULATORS.items():
         logging.info(f"=== Searching for {province} ===")
         
-        # Build search queries
         queries = []
         for domain in info["domains"]:
             for maid_kw in info["keywords"]:
-                # Simple query format: "maid_kw" domain discipline
-                # To find cases, search: "medical assistance in dying" cpso.on.ca discipline
-                # This catches both direct pages and mentions.
                 query = f'"{maid_kw}" {domain} discipline'
                 queries.append(query)
                 query_cond = f'"{maid_kw}" {domain} conditions'
                 queries.append(query_cond)
                 
-        # Run searches
         province_results = []
         for query in queries:
             search_res = search_yahoo(query, max_pages=2)
             for res in search_res:
                 url = res["url"]
-                # Filter results: Only keep URLs that actually belong to/reference the domains of interest
                 is_valid_domain = False
                 for domain in info["domains"]:
                     if domain in url.lower():
                         is_valid_domain = True
                         break
                 
-                # Also accept Ontario Physicians & Surgeons Discipline Tribunal (opsdt.ca) or register.cpso.on.ca
                 if is_valid_domain and url not in inspected_urls:
                     inspected_urls.add(url)
                     province_results.append(res)
             
-            time.sleep(3)  # Delay between queries
+            time.sleep(3)
             
         logging.info(f"Found {len(province_results)} unique candidate URLs for {province}")
         
-        # Inspect candidates
         for res in province_results:
             url = res["url"]
             title = res["title"]
+            search_snippet = res.get("search_snippet", "")
             
-            is_match, reason, snippet = inspect_page(url)
+            is_match, reason, snippet = inspect_page(url, search_snippet)
             
-            # If it's a PDF, we might not be able to fetch/inspect text easily,
-            # but if it matches search query on CPSO or OPSDT, we still flag it for manual review
-            if url.lower().endswith('.pdf') or is_match:
+            if is_match:
                 finding = {
                     "province": province,
                     "url": url,
                     "title": title,
-                    "is_pdf": url.lower().endswith('.pdf'),
+                    "is_pdf": url.lower().endswith('.pdf') or '.pdf' in reason.lower() or 'alertdocument' in url.lower(),
                     "match_reason": reason,
-                    "snippet": snippet if is_match else "PDF Document (Requires manual review)"
+                    "snippet": snippet
                 }
                 all_findings.append(finding)
                 logging.info(f"[MATCH FOUND] {province}: {title} | {url}")
                 
-    # Save results to JSON
     output_json = "maid_discipline_results.json"
     with open(output_json, "w", encoding="utf-8") as f:
         json.dump(all_findings, f, indent=2, ensure_ascii=False)
     logging.info(f"Saved structured JSON results to {output_json}")
     
-    # Save results to Markdown Report
     output_md = "maid_discipline_report.md"
     with open(output_md, "w", encoding="utf-8") as f:
         f.write("# Canadian Physician Regulators: MAID-Related Discipline Report\n\n")
