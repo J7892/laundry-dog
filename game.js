@@ -748,6 +748,16 @@ class Game {
       this.startGame();
     });
 
+    // Pause button in HUD
+    const pauseHudBtn = document.getElementById('btn-pause-hud');
+    if (pauseHudBtn) {
+      pauseHudBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.togglePause();
+      });
+    }
+
     // Pause controls
     document.getElementById('btn-resume').addEventListener('click', () => this.resumeGame());
     document.getElementById('btn-restart-level').addEventListener('click', () => {
