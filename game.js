@@ -422,6 +422,11 @@ class Game {
     this.score = 0;
     this.levelScore = 0;
     
+    // Gamepad controller state parameters
+    this.gamepadPauseLatch = false;
+    this.gamepadMenuClickLatch = false;
+    this.gamepadMenuMoveCooldown = 0;
+    
     // Setup Resolution (High DPI Retina Fix)
     this.setupCanvasDPR();
     window.addEventListener('resize', () => this.setupCanvasDPR());
@@ -726,18 +731,66 @@ class Game {
     // Calculate scaling ratio
     const scaleX = windowW / w;
     const scaleY = windowH / h;
-    const scale = Math.min(scaleX, scaleY, 1.0); // clamp to max 1.0
+    const scale = Math.min(scaleX, scaleY); // allow full-screen upscaling
 
     // Apply scaling centered
     container.style.transform = `translate(-50%, -50%) scale(${scale})`;
   }
 
-  // Poll active gamepads and convert buttons/sticks to active virtual key codes
+  // Clear any gamepad menu highlights
+  clearMenuHighlights() {
+    document.querySelectorAll('.gamepad-highlight').forEach(el => {
+      el.classList.remove('gamepad-highlight');
+    });
+  }
+
+  // Find geometrically closest HTML element in the direction relative to current element
+  findClosestElement(currentEl, direction, elements) {
+    const rect = currentEl.getBoundingClientRect();
+    const currentCenterX = rect.left + rect.width / 2;
+    const currentCenterY = rect.top + rect.height / 2;
+    
+    let bestEl = null;
+    let minScore = Infinity;
+    
+    elements.forEach(el => {
+      if (el === currentEl) return;
+      
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      
+      const dx = cx - currentCenterX;
+      const dy = cy - currentCenterY;
+      
+      // Strict directional safety filters
+      if (direction === 'up' && dy >= -2) return;
+      if (direction === 'down' && dy <= 2) return;
+      if (direction === 'left' && dx >= -2) return;
+      if (direction === 'right' && dx <= 2) return;
+      
+      // Scoring: prioritize primary direction axis with a high secondary axis penalty
+      let score = 0;
+      if (direction === 'up' || direction === 'down') {
+        score = Math.abs(dy) + Math.abs(dx) * 2.2;
+      } else {
+        score = Math.abs(dx) + Math.abs(dy) * 2.2;
+      }
+      
+      if (score < minScore) {
+        minScore = score;
+        bestEl = el;
+      }
+    });
+    
+    return bestEl;
+  }
+
+  // Poll active gamepads and convert buttons/sticks to active virtual key codes or menu actions
   updateGamepad() {
     if (!navigator.getGamepads) return;
     const gamepads = navigator.getGamepads();
     
-    // Process the first active connected gamepad
     let gp = null;
     for (let i = 0; i < gamepads.length; i++) {
       if (gamepads[i] && gamepads[i].connected) {
@@ -748,7 +801,7 @@ class Game {
 
     if (!gp) return;
 
-    const threshold = 0.25;
+    const threshold = 0.4; // Slightly larger stick deadzone for menus
     const axisX = gp.axes[0];
     const axisY = gp.axes[1];
     const dpadLeft = gp.buttons[14]?.pressed;
@@ -756,7 +809,7 @@ class Game {
     const dpadDown = gp.buttons[13]?.pressed;
     const dpadUp = gp.buttons[12]?.pressed;
     
-    // Action buttons (A=Jump, B=Duck, X/Y=Alt, Triggers=Duck)
+    // Action buttons
     const btnA = gp.buttons[0]?.pressed;
     const btnB = gp.buttons[1]?.pressed;
     const btnX = gp.buttons[2]?.pressed;
@@ -764,60 +817,145 @@ class Game {
     const triggerLeft = gp.buttons[6]?.pressed;
     const triggerRight = gp.buttons[7]?.pressed;
 
-    // Detect if gamepad controls are actively being held or deflected
-    const isGamepadInputActive = (
-      Math.abs(axisX) > threshold ||
-      Math.abs(axisY) > threshold ||
-      dpadLeft || dpadRight || dpadDown || dpadUp ||
-      btnA || btnB || btnX || btnY || triggerLeft || triggerRight
-    );
+    // Detect if a menu overlay is currently active
+    const activeOverlay = document.querySelector('.screen-overlay:not(.hidden)');
 
-    if (isGamepadInputActive) {
-      this.lastInputSource = 'gamepad';
-    }
+    if (activeOverlay) {
+      // 1. MENU NAVIGATION STATE
+      // Release any gameplay keys
+      this.keys['ArrowLeft'] = false;
+      this.keys['KeyA'] = false;
+      this.keys['ArrowRight'] = false;
+      this.keys['KeyD'] = false;
+      this.keys['ArrowUp'] = false;
+      this.keys['KeyW'] = false;
+      this.keys['Space'] = false;
+      this.keys['ArrowDown'] = false;
+      this.keys['KeyS'] = false;
 
-    if (this.lastInputSource === 'gamepad') {
-      // Horizontal Walk Directional
-      if (axisX < -threshold || dpadLeft) {
-        this.keys['ArrowLeft'] = true;
-        this.keys['KeyA'] = true;
-        this.keys['ArrowRight'] = false;
-        this.keys['KeyD'] = false;
+      // Find all clickable buttons and inputs in the active overlay screen
+      const items = Array.from(activeOverlay.querySelectorAll('button:not(.hidden), .btn-level:not(.hidden), .btn-breed:not(.hidden)'));
+      if (items.length === 0) return;
+
+      // Determine highlighted element
+      let highlightedEl = activeOverlay.querySelector('.gamepad-highlight');
+      if (!highlightedEl) {
+        highlightedEl = items[0];
+        highlightedEl.classList.add('gamepad-highlight');
+      }
+
+      // Handle Directional navigations
+      let moveDir = null;
+      if (axisY < -threshold || dpadUp) {
+        moveDir = 'up';
+      } else if (axisY > threshold || dpadDown) {
+        moveDir = 'down';
+      } else if (axisX < -threshold || dpadLeft) {
+        moveDir = 'left';
       } else if (axisX > threshold || dpadRight) {
-        this.keys['ArrowRight'] = true;
-        this.keys['KeyD'] = true;
-        this.keys['ArrowLeft'] = false;
-        this.keys['KeyA'] = false;
-      } else {
-        this.keys['ArrowLeft'] = false;
-        this.keys['KeyA'] = false;
-        this.keys['ArrowRight'] = false;
-        this.keys['KeyD'] = false;
+        moveDir = 'right';
       }
 
-      // Vertical Duck / Slide
-      if (axisY > threshold || dpadDown || triggerLeft || triggerRight || btnB) {
-        this.keys['ArrowDown'] = true;
-        this.keys['KeyS'] = true;
-      } else {
-        this.keys['ArrowDown'] = false;
-        this.keys['KeyS'] = false;
+      // Decrement move cooldown timer
+      if (this.gamepadMenuMoveCooldown > 0) {
+        this.gamepadMenuMoveCooldown--;
       }
 
-      // Vertical Jump / Rise
-      if (axisY < -threshold || dpadUp || btnA) {
-        this.keys['ArrowUp'] = true;
-        this.keys['KeyW'] = true;
-        this.keys['Space'] = true;
-      } else {
-        this.keys['ArrowUp'] = false;
-        this.keys['KeyW'] = false;
-        this.keys['Space'] = false;
+      if (moveDir && this.gamepadMenuMoveCooldown === 0) {
+        const nextEl = this.findClosestElement(highlightedEl, moveDir, items);
+        if (nextEl) {
+          highlightedEl.classList.remove('gamepad-highlight');
+          nextEl.classList.add('gamepad-highlight');
+          
+          // Ensure level scroll grid updates visually
+          nextEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          
+          // Synthesize a soft menu click beep!
+          if (this.synth) {
+            this.synth.playCollectionChime(); // small chime note
+          }
+          this.gamepadMenuMoveCooldown = 15; // Cooldown of 250ms (at 60fps)
+        }
       }
 
-      // Release control lock once gamepad inputs return to neutral
-      if (!isGamepadInputActive) {
-        this.lastInputSource = null;
+      // Reset menu navigation cooldown when sticks return to neutral
+      if (!moveDir) {
+        this.gamepadMenuMoveCooldown = 0;
+      }
+
+      // Handle Menu Button clicks (South button clicks highlighted item)
+      if (btnA) {
+        if (!this.gamepadMenuClickLatch) {
+          highlightedEl.click();
+          this.gamepadMenuClickLatch = true;
+          // Clear active overlays highlights
+          this.clearMenuHighlights();
+        }
+      } else {
+        this.gamepadMenuClickLatch = false;
+      }
+
+    } else {
+      // 2. ACTIVE GAMEPLAY STATE
+      // Clear any lingering highlights when overlays disappear
+      if (document.querySelector('.gamepad-highlight')) {
+        this.clearMenuHighlights();
+      }
+
+      const isGamepadInputActive = (
+        Math.abs(axisX) > 0.25 ||
+        Math.abs(axisY) > 0.25 ||
+        dpadLeft || dpadRight || dpadDown || dpadUp ||
+        btnA || btnB || btnX || btnY || triggerLeft || triggerRight
+      );
+
+      if (isGamepadInputActive) {
+        this.lastInputSource = 'gamepad';
+      }
+
+      if (this.lastInputSource === 'gamepad') {
+        // Horizontal Walk Directional
+        if (axisX < -0.25 || dpadLeft) {
+          this.keys['ArrowLeft'] = true;
+          this.keys['KeyA'] = true;
+          this.keys['ArrowRight'] = false;
+          this.keys['KeyD'] = false;
+        } else if (axisX > 0.25 || dpadRight) {
+          this.keys['ArrowRight'] = true;
+          this.keys['KeyD'] = true;
+          this.keys['ArrowLeft'] = false;
+          this.keys['KeyA'] = false;
+        } else {
+          this.keys['ArrowLeft'] = false;
+          this.keys['KeyA'] = false;
+          this.keys['ArrowRight'] = false;
+          this.keys['KeyD'] = false;
+        }
+
+        // Vertical Duck / Slide
+        if (axisY > 0.25 || dpadDown || triggerLeft || triggerRight || btnB) {
+          this.keys['ArrowDown'] = true;
+          this.keys['KeyS'] = true;
+        } else {
+          this.keys['ArrowDown'] = false;
+          this.keys['KeyS'] = false;
+        }
+
+        // Vertical Jump / Rise
+        if (axisY < -0.25 || dpadUp || btnA) {
+          this.keys['ArrowUp'] = true;
+          this.keys['KeyW'] = true;
+          this.keys['Space'] = true;
+        } else {
+          this.keys['ArrowUp'] = false;
+          this.keys['KeyW'] = false;
+          this.keys['Space'] = false;
+        }
+
+        // Release control lock once gamepad inputs return to neutral
+        if (!isGamepadInputActive) {
+          this.lastInputSource = null;
+        }
       }
     }
 
@@ -912,6 +1050,47 @@ class Game {
         statuses.forEach(s => s.textContent = enabled ? "ON" : "OFF");
       });
     });
+
+    // Fullscreen toggles
+    const toggleFsBtns = document.querySelectorAll('.btn-toggle-fullscreen');
+    toggleFsBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.toggleFullscreen();
+      });
+    });
+
+    // Sync fullscreen button status on window state change
+    const syncFsUI = () => {
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+      document.querySelectorAll('.fullscreen-status').forEach(s => {
+        s.textContent = isFs ? "ON" : "OFF";
+      });
+    };
+    window.addEventListener('fullscreenchange', syncFsUI);
+    window.addEventListener('webkitfullscreenchange', syncFsUI);
+  }
+
+  // Toggle browser native fullscreen mode
+  toggleFullscreen() {
+    const docEl = document.documentElement;
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement) {
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen();
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen();
+      } else if (docEl.mozRequestFullScreen) {
+        docEl.mozRequestFullScreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      }
+    }
   }
 
   // Start a new game session

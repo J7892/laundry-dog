@@ -418,7 +418,7 @@ canvas {
   margin-top: 8px;
 }
 
-.btn-toggle-music, .btn-toggle-controls {
+.btn-toggle-music, .btn-toggle-controls, .btn-toggle-fullscreen {
   background: transparent;
   border: none;
   color: var(--text-secondary);
@@ -434,7 +434,7 @@ canvas {
   transition: all 0.2s ease;
 }
 
-.btn-toggle-music:hover, .btn-toggle-controls:hover {
+.btn-toggle-music:hover, .btn-toggle-controls:hover, .btn-toggle-fullscreen:hover {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.04);
 }
@@ -848,4 +848,13 @@ canvas {
 
 .btn-breed.active .breed-name {
   color: var(--text-primary);
+}
+
+/* Console Gamepad Cursor Outline Highlight Overlay */
+.gamepad-highlight {
+  outline: 3px solid #a855f7 !important;
+  outline-offset: 2px;
+  background: rgba(168, 85, 247, 0.25) !important;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.45) !important;
+  transform: translateY(-2px);
 }
