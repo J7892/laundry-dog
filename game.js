@@ -418,6 +418,7 @@ class Game {
     this.synth = new SoundSynth();
     this.gameState = 'START'; // START, PLAYING, PAUSED, VICTORY, GAMEOVER
     this.currentLevelIndex = 0;
+    this.selectedBreed = 'golden'; // golden, shihtzu, pug, dalmatian, frenchie
     this.score = 0;
     this.levelScore = 0;
     
@@ -739,6 +740,17 @@ class Game {
         levelBtns.forEach(b => b.classList.remove('active'));
         targetBtn.classList.add('active');
         this.currentLevelIndex = parseInt(targetBtn.dataset.level, 10) - 1;
+      });
+    });
+
+    // Breed Select grid buttons
+    const breedBtns = document.querySelectorAll('.btn-breed');
+    breedBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const targetBtn = e.currentTarget;
+        breedBtns.forEach(b => b.classList.remove('active'));
+        targetBtn.classList.add('active');
+        this.selectedBreed = targetBtn.dataset.breed;
       });
     });
 
@@ -3363,21 +3375,57 @@ class Game {
       leg2 = -0.4;
     }
     
+    // Define breed visual assets based on selected breed
+    const breed = this.selectedBreed || 'golden';
+    let colorBody = '#f59e0b';     // Default golden yellow
+    let colorDetails = '#d97706';  // Default darker yellow
+    let colorTail = '#b45309';     // Default dark tail
+    let colorSnout = '#fef08a';    // Default light snout
+    
+    if (breed === 'shihtzu') {
+      colorBody = '#f8fafc';       // White
+      colorDetails = '#78350f';    // Brown spots/ears
+      colorTail = '#f8fafc';
+      colorSnout = '#f1f5f9';
+    } else if (breed === 'pug') {
+      colorBody = '#cbd5e1';       // Fawn grey/silver pug
+      colorDetails = '#1e293b';    // Dark details
+      colorTail = '#1e293b';
+      colorSnout = '#0f172a';      // Black mask snout
+    } else if (breed === 'dalmatian') {
+      colorBody = '#ffffff';       // White
+      colorDetails = '#e2e8f0';    // White/light grey details
+      colorTail = '#ffffff';
+      colorSnout = '#f1f5f9';
+    } else if (breed === 'frenchie') {
+      colorBody = '#475569';       // Blue slate grey
+      colorDetails = '#334155';    // Darker slate grey
+      colorTail = '#334155';
+      colorSnout = '#1e293b';      // Charcoal mask
+    }
+
     // A. Draw Tail
     this.ctx.save();
     this.ctx.translate(-w/2 + 5, isDucking ? -1 : -6);
     this.ctx.rotate(-0.5 + tailAngle);
-    this.ctx.fillStyle = '#b45309'; // gold shadow
+    this.ctx.fillStyle = colorTail;
     this.ctx.beginPath();
     this.ctx.ellipse(0, 0, 11, 4, 0, 0, Math.PI*2);
     this.ctx.fill();
+    // Add fluffy brown tip to Shih Tzu tail
+    if (breed === 'shihtzu') {
+      this.ctx.fillStyle = '#78350f';
+      this.ctx.beginPath();
+      this.ctx.ellipse(4, 0, 5, 3, 0, 0, Math.PI*2);
+      this.ctx.fill();
+    }
     this.ctx.restore();
 
     // B. Draw Legs (Outer legs & Inner legs)
     const legY = h/2 - 4;
     this.ctx.lineWidth = 6;
     this.ctx.lineCap = 'round';
-    this.ctx.strokeStyle = '#d97706'; // Golden Retriever dark gold
+    this.ctx.strokeStyle = colorDetails;
     
     // Rear Leg 1
     this.ctx.save();
@@ -3420,7 +3468,7 @@ class Game {
     this.ctx.restore();
 
     // C. Draw Torso Body
-    this.ctx.fillStyle = '#f59e0b'; // golden retrieve body color
+    this.ctx.fillStyle = colorBody;
     this.ctx.beginPath();
     if (isDucking) {
       this.ctx.roundRect(-w/2, -h/2 + 2, w - 8, h - 8, 8);
@@ -3428,6 +3476,27 @@ class Game {
       this.ctx.roundRect(-w/2, -h/2, w - 10, h - 12, 11);
     }
     this.ctx.fill();
+
+    // Custom overlay patterns for spots
+    if (breed === 'shihtzu') {
+      this.ctx.fillStyle = '#78350f'; // Brown spot markings
+      // spot 1 (hip)
+      this.ctx.beginPath();
+      this.ctx.arc(-w/4, -h/6, 7.5, 0, Math.PI*2);
+      this.ctx.fill();
+      // spot 2 (shoulder)
+      this.ctx.beginPath();
+      this.ctx.arc(w/8, 0, 8.5, 0, Math.PI*2);
+      this.ctx.fill();
+    } else if (breed === 'dalmatian') {
+      this.ctx.fillStyle = '#0f172a'; // Tiny black spots
+      this.ctx.beginPath();
+      this.ctx.arc(-w/3, -h/5, 3.2, 0, Math.PI*2);
+      this.ctx.arc(-w/6, h/8, 2.8, 0, Math.PI*2);
+      this.ctx.arc(w/12, -h/4, 3.0, 0, Math.PI*2);
+      this.ctx.arc(-w/4, h/4, 2.2, 0, Math.PI*2);
+      this.ctx.fill();
+    }
 
     // D. Draw Head
     this.ctx.save();
@@ -3440,25 +3509,61 @@ class Game {
     // Head circle base
     this.ctx.beginPath();
     this.ctx.arc(0, 0, 13, 0, Math.PI*2);
-    this.ctx.fillStyle = '#f59e0b';
+    this.ctx.fillStyle = colorBody;
     this.ctx.fill();
-    
-    // Floppy Ear
-    this.ctx.save();
-    this.ctx.translate(-3, -5);
-    let ear = 0.2;
-    if (isJumping) ear = -0.3;
-    else if (isMoving) ear = Math.sin(p.animTime * 14) * 0.15 + 0.1;
-    this.ctx.rotate(ear);
-    
-    this.ctx.fillStyle = '#d97706';
-    this.ctx.beginPath();
-    this.ctx.ellipse(0, 7, 5.5, 11, 0.1, 0, Math.PI*2);
-    this.ctx.fill();
-    this.ctx.restore();
 
-    // Cream Snout
-    this.ctx.fillStyle = '#fef08a';
+    // Head markings/patches
+    if (breed === 'shihtzu') {
+      this.ctx.fillStyle = '#78350f'; // Brown patch on eyes/ears
+      this.ctx.beginPath();
+      this.ctx.arc(3.5, -2.5, 6, 0, Math.PI*2); // eye patch
+      this.ctx.fill();
+    } else if (breed === 'dalmatian') {
+      this.ctx.fillStyle = '#0f172a'; // Black patch near ear
+      this.ctx.beginPath();
+      this.ctx.arc(-2, -5, 3, 0, Math.PI*2);
+      this.ctx.fill();
+    }
+    
+    // Ears drawing
+    if (breed === 'frenchie') {
+      // Pointy/Upright Frenchie Ears
+      this.ctx.save();
+      this.ctx.translate(-4, -6);
+      let ear = -0.1;
+      if (isJumping) ear = -0.3;
+      else if (isMoving) ear = Math.sin(p.animTime * 14) * 0.1 - 0.1;
+      this.ctx.rotate(ear);
+      
+      this.ctx.fillStyle = colorDetails;
+      this.ctx.beginPath();
+      this.ctx.ellipse(0, -6, 5, 9.5, -0.15, 0, Math.PI*2);
+      this.ctx.fill();
+      
+      // Pink inner ear
+      this.ctx.fillStyle = '#fda4af';
+      this.ctx.beginPath();
+      this.ctx.ellipse(0, -6, 2.5, 6.5, -0.15, 0, Math.PI*2);
+      this.ctx.fill();
+      this.ctx.restore();
+    } else {
+      // Floppy Ears (Golden, Shih Tzu, Pug, Dalmatian)
+      this.ctx.save();
+      this.ctx.translate(-3, -5);
+      let ear = 0.2;
+      if (isJumping) ear = -0.3;
+      else if (isMoving) ear = Math.sin(p.animTime * 14) * 0.15 + 0.1;
+      this.ctx.rotate(ear);
+      
+      this.ctx.fillStyle = colorDetails;
+      this.ctx.beginPath();
+      this.ctx.ellipse(0, 7, 5.5, 11, 0.1, 0, Math.PI*2);
+      this.ctx.fill();
+      this.ctx.restore();
+    }
+
+    // Snout
+    this.ctx.fillStyle = colorSnout;
     this.ctx.beginPath();
     this.ctx.arc(7, 2, 5.5, 0, Math.PI*2);
     this.ctx.fill();
