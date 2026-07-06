@@ -697,6 +697,7 @@ class Game {
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
         e.preventDefault();
       }
+      this.lastInputSource = 'keyboard';
       this.keys[e.code] = true;
 
       // Single triggers
@@ -706,6 +707,7 @@ class Game {
     });
 
     window.addEventListener('keyup', (e) => {
+      this.lastInputSource = 'keyboard';
       this.keys[e.code] = false;
     });
   }
@@ -730,6 +732,108 @@ class Game {
     container.style.transform = `translate(-50%, -50%) scale(${scale})`;
   }
 
+  // Poll active gamepads and convert buttons/sticks to active virtual key codes
+  updateGamepad() {
+    if (!navigator.getGamepads) return;
+    const gamepads = navigator.getGamepads();
+    
+    // Process the first active connected gamepad
+    let gp = null;
+    for (let i = 0; i < gamepads.length; i++) {
+      if (gamepads[i] && gamepads[i].connected) {
+        gp = gamepads[i];
+        break;
+      }
+    }
+
+    if (!gp) return;
+
+    const threshold = 0.25;
+    const axisX = gp.axes[0];
+    const axisY = gp.axes[1];
+    const dpadLeft = gp.buttons[14]?.pressed;
+    const dpadRight = gp.buttons[15]?.pressed;
+    const dpadDown = gp.buttons[13]?.pressed;
+    const dpadUp = gp.buttons[12]?.pressed;
+    
+    // Action buttons (A=Jump, B=Duck, X/Y=Alt, Triggers=Duck)
+    const btnA = gp.buttons[0]?.pressed;
+    const btnB = gp.buttons[1]?.pressed;
+    const btnX = gp.buttons[2]?.pressed;
+    const btnY = gp.buttons[3]?.pressed;
+    const triggerLeft = gp.buttons[6]?.pressed;
+    const triggerRight = gp.buttons[7]?.pressed;
+
+    // Detect if gamepad controls are actively being held or deflected
+    const isGamepadInputActive = (
+      Math.abs(axisX) > threshold ||
+      Math.abs(axisY) > threshold ||
+      dpadLeft || dpadRight || dpadDown || dpadUp ||
+      btnA || btnB || btnX || btnY || triggerLeft || triggerRight
+    );
+
+    if (isGamepadInputActive) {
+      this.lastInputSource = 'gamepad';
+    }
+
+    if (this.lastInputSource === 'gamepad') {
+      // Horizontal Walk Directional
+      if (axisX < -threshold || dpadLeft) {
+        this.keys['ArrowLeft'] = true;
+        this.keys['KeyA'] = true;
+        this.keys['ArrowRight'] = false;
+        this.keys['KeyD'] = false;
+      } else if (axisX > threshold || dpadRight) {
+        this.keys['ArrowRight'] = true;
+        this.keys['KeyD'] = true;
+        this.keys['ArrowLeft'] = false;
+        this.keys['KeyA'] = false;
+      } else {
+        this.keys['ArrowLeft'] = false;
+        this.keys['KeyA'] = false;
+        this.keys['ArrowRight'] = false;
+        this.keys['KeyD'] = false;
+      }
+
+      // Vertical Duck / Slide
+      if (axisY > threshold || dpadDown || triggerLeft || triggerRight || btnB) {
+        this.keys['ArrowDown'] = true;
+        this.keys['KeyS'] = true;
+      } else {
+        this.keys['ArrowDown'] = false;
+        this.keys['KeyS'] = false;
+      }
+
+      // Vertical Jump / Rise
+      if (axisY < -threshold || dpadUp || btnA) {
+        this.keys['ArrowUp'] = true;
+        this.keys['KeyW'] = true;
+        this.keys['Space'] = true;
+      } else {
+        this.keys['ArrowUp'] = false;
+        this.keys['KeyW'] = false;
+        this.keys['Space'] = false;
+      }
+
+      // Release control lock once gamepad inputs return to neutral
+      if (!isGamepadInputActive) {
+        this.lastInputSource = null;
+      }
+    }
+
+    // Process Start/Select Pause Toggles
+    const buttonStart = gp.buttons[9]?.pressed;
+    const buttonSelect = gp.buttons[8]?.pressed;
+    if (buttonStart || buttonSelect) {
+      if (!this.gamepadPauseLatch) {
+        this.togglePause();
+        this.gamepadPauseLatch = true;
+      }
+    } else {
+      this.gamepadPauseLatch = false;
+    }
+  }
+
   // Bind HTML buttons
   initUI() {
     // Level Select grid buttons
@@ -748,9 +852,16 @@ class Game {
     breedBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const targetBtn = e.currentTarget;
-        breedBtns.forEach(b => b.classList.remove('active'));
-        targetBtn.classList.add('active');
         this.selectedBreed = targetBtn.dataset.breed;
+        
+        // Sync active state class on all breed buttons across all overlays
+        breedBtns.forEach(b => {
+          if (b.dataset.breed === this.selectedBreed) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
       });
     });
 
@@ -1259,6 +1370,8 @@ class Game {
   loop(timestamp) {
     const elapsed = timestamp - this.lastTime;
     this.lastTime = timestamp;
+
+    this.updateGamepad();
 
     if (this.gameState === 'PLAYING') {
       this.updatePhysics();
