@@ -518,35 +518,40 @@ class Game {
     const mobileOverlay = document.getElementById('mobile-controls');
     if (isTouch && mobileOverlay) {
       mobileOverlay.classList.remove('hidden');
+      document.querySelectorAll('.btn-toggle-controls').forEach(el => {
+        el.classList.remove('hidden');
+      });
     }
 
     // Control mode toggle binding (D-Pad vs Joystick)
     this.controlMode = 'DPAD';
     const dpadEl = document.getElementById('mobile-dpad');
     const joystickEl = document.getElementById('mobile-joystick');
-    const toggleBtn = document.getElementById('btn-control-toggle');
+    const toggleBtns = document.querySelectorAll('.btn-toggle-controls');
 
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', (e) => {
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
         e.preventDefault();
         if (this.controlMode === 'DPAD') {
           this.controlMode = 'JOYSTICK';
-          toggleBtn.textContent = '🎮 Toggle D-PAD';
           dpadEl.classList.add('hidden');
           joystickEl.classList.remove('hidden');
         } else {
           this.controlMode = 'DPAD';
-          toggleBtn.textContent = '🕹️ Toggle Joystick';
           dpadEl.classList.remove('hidden');
           joystickEl.classList.add('hidden');
         }
+        // Sync control status text in menus
+        document.querySelectorAll('.controls-status').forEach(s => {
+          s.textContent = this.controlMode;
+        });
         // Reset direction keys
         this.keys['ArrowLeft'] = false;
         this.keys['KeyA'] = false;
         this.keys['ArrowRight'] = false;
         this.keys['KeyD'] = false;
       });
-    }
+    });
 
     // Joystick touch tracking
     const jBase = document.getElementById('joystick-base');
@@ -2609,19 +2614,38 @@ class Game {
             const bookColors = ['#ef4444', '#3b82f6', '#10b981', '#fbbf24', '#a855f7', '#06b6d4'];
             let bx = x + 10;
             while (bx < x + w - 18) {
-              const bh = 15 + Math.random() * 20;
-              const bw = 5 + Math.random() * 8;
-              this.ctx.fillStyle = bookColors[Math.floor(Math.random() * bookColors.length)];
+              // Deterministic seed based on coordinate indices to prevent screen flicker!
+              const seedVal = Math.sin(bx * 17.11 + sy * 53.47) * 43758.5453;
+              const r1 = seedVal - Math.floor(seedVal);
+              const r2 = (seedVal * 10) - Math.floor(seedVal * 10);
+              const r3 = (seedVal * 100) - Math.floor(seedVal * 100);
+              const r4 = (seedVal * 1000) - Math.floor(seedVal * 1000);
+
+              const bh = 15 + r1 * 20;
+              const bw = 5 + r2 * 8;
+              this.ctx.fillStyle = bookColors[Math.floor(r3 * bookColors.length)];
               
-              const isTilted = Math.random() > 0.8;
+              const isTilted = r4 > 0.8;
               if (isTilted) {
                 this.ctx.save();
                 this.ctx.translate(bx, sy);
-                this.ctx.rotate(0.2);
+                this.ctx.rotate(0.18);
                 this.ctx.fillRect(0, -bh, bw, bh);
+                
+                // Draw a gold embossed spine decoration
+                if (bh > 22 && bw > 7) {
+                  this.ctx.fillStyle = '#fbbf24';
+                  this.ctx.fillRect(1, -bh + 4, bw - 2, 1.5);
+                }
                 this.ctx.restore();
               } else {
                 this.ctx.fillRect(bx, sy - bh, bw, bh);
+                
+                // Draw a gold embossed spine decoration
+                if (bh > 22 && bw > 7) {
+                  this.ctx.fillStyle = '#fbbf24';
+                  this.ctx.fillRect(bx + 1, sy - bh + 4, bw - 2, 1.5);
+                }
               }
               bx += bw + 3;
             }
