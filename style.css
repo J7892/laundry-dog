@@ -221,7 +221,7 @@ canvas {
   z-index: 20;
   transition: opacity 0.3s ease, visibility 0.3s ease;
   overflow-y: auto; /* enable scrolling if layout overflows */
-  padding: 16px 0;
+  padding: 0; /* remove outer padding to fit desktop container height */
   box-sizing: border-box;
 }
 
@@ -234,7 +234,7 @@ canvas {
 .screen-content {
   width: 100%;
   max-width: 820px;
-  padding: 24px 40px 12px 40px; /* add top padding to protect logo bounce */
+  padding: 8px 40px; /* compacted padding */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -244,8 +244,8 @@ canvas {
 /* 1. Start Screen Specifics */
 .title-container {
   text-align: center;
-  margin-bottom: 8px;
-  padding-top: 10px; /* safety cushion to prevent top bounce clipping */
+  margin-bottom: 4px;
+  padding-top: 12px; /* safety cushion to prevent top bounce clipping */
 }
 
 .logo-emoji {
@@ -295,10 +295,10 @@ canvas {
   font-family: var(--font-display);
   font-size: 1.15rem;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 8px; /* reduced from 16px */
   color: var(--text-primary);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 8px;
+  padding-bottom: 4px; /* reduced from 8px */
 }
 
 .controls-list {
@@ -796,8 +796,8 @@ canvas {
    Dog Breed Selector Styles
    ========================================================================== */
 .breed-select-section {
-  margin-top: 14px;
-  margin-bottom: 14px;
+  margin-top: 6px; /* reduced from 14px */
+  margin-bottom: 8px; /* reduced from 14px */
   text-align: left;
 }
 
@@ -805,7 +805,7 @@ canvas {
   font-family: var(--font-display);
   font-size: 0.88rem;
   color: var(--text-secondary);
-  margin-bottom: 8px;
+  margin-bottom: 4px; /* reduced from 8px */
   font-weight: 700;
   letter-spacing: 0.3px;
 }
