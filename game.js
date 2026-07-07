@@ -1749,14 +1749,14 @@ class Game {
 
   // Update non-player entities: Hazards patrol, falling traps
   updateEntities() {
-    // 1. Patrol Hazards (Dust Bunnies)
+    // 1. Patrol Hazards (Cats & Dust Bunnies)
     for (let hz of this.hazards) {
-      if (hz.type === 'dust-bunny') {
+      if (hz.type === 'dust-bunny' || hz.type === 'cat') {
         hz.x += hz.vx;
         
-        // Snap bunny to their respective floor level
+        // Snap cat to their respective floor level
         const bunnyFloor = hz.floorY !== undefined ? hz.floorY : 480;
-        hz.y = bunnyFloor - 24; // bunny size ~24px
+        hz.y = bunnyFloor - 24; // size ~24px
         
         // Reverse direction at level bounds or custom boundaries
         if (hz.x < 50 || hz.x > this.levelData.width - 250) {
@@ -1927,17 +1927,62 @@ class Game {
       }
     }
 
-    // 3. Hazard collisions (dust bunnies & falling objects)
-    if (p.invulnTime === 0 && !p.isDepositing) {
-      for (let hz of this.hazards) {
-        // Check collision bounding box
-        const sizeX = hz.type === 'dust-bunny' ? 24 : 20;
-        const sizeY = hz.type === 'dust-bunny' ? 24 : 20;
-        
+    // 3. Hazard collisions (cats/dust-bunnies & falling objects)
+    if (!p.isDepositing) {
+      for (let i = this.hazards.length - 1; i >= 0; i--) {
+        const hz = this.hazards[i];
+        const isCat = (hz.type === 'dust-bunny' || hz.type === 'cat');
+        const sizeX = isCat ? 30 : 20; // Cats are slightly wider/larger
+        const sizeY = isCat ? 24 : 20;
+
+        // Check bounding box overlap
         if (p.x + 5 < hz.x + sizeX && p.x + p.width - 5 > hz.x &&
-            p.y + 5 < hz.y + sizeY && p.y + p.height - 5 > hz.y) {
+            p.y + 2 < hz.y + sizeY && p.y + p.height - 2 > hz.y) {
           
-          this.damagePlayer();
+          // Determine if player is jumping/falling directly on top of the cat
+          const playerBottom = p.y + p.height;
+          const catCenterY = hz.y + sizeY / 2;
+          
+          if (isCat && p.vy > 0.2 && playerBottom <= catCenterY + 4) {
+            // Elimination / stomp success!
+            this.hazards.splice(i, 1);
+            p.vy = -6.0; // Satisfying platformer bounce!
+            p.onGround = false;
+            
+            // Add points
+            const points = 200;
+            this.score += points;
+            this.levelScore += points;
+            document.getElementById('hud-score-val').textContent = this.score;
+
+            // Play elimination sound (soft sweep & high meow arpeggio)
+            if (this.synth) {
+              this.synth.playNote(523.25, 'triangle', 0.08, 0.06, 0); // C5
+              this.synth.playNote(783.99, 'sine', 0.12, 0.05, 0.05);   // G5
+            }
+            
+            // Spawn confetti/sparkle poof particles at stomp site
+            this.spawnImpactParticles(hz.x + sizeX/2, hz.y + sizeY/2);
+            for (let k = 0; k < 12; k++) {
+              this.particles.push({
+                x: hz.x + sizeX/2,
+                y: hz.y + sizeY/2,
+                vx: (Math.random() - 0.5) * 5.0,
+                vy: -1.0 - Math.random() * 3.0,
+                size: 3 + Math.random() * 4,
+                color: `hsl(${Math.random() * 360}, 85%, 65%)`,
+                alpha: 1.0,
+                life: 0,
+                maxLife: 20 + Math.random() * 20,
+                type: 'confetti'
+              });
+            }
+          } else {
+            // Normal damage collision
+            if (p.invulnTime === 0) {
+              this.damagePlayer();
+            }
+          }
           break;
         }
       }
@@ -3544,32 +3589,157 @@ class Game {
       this.ctx.save();
       this.ctx.translate(hz.x, hz.y);
 
-      // Dust Bunny (Animated crawling grey fuzzy ball)
-      if (hz.type === 'dust-bunny') {
-        const wiggle = Math.sin(time * 5.0 + hz.x) * 2;
+      // Cat Patrol Obstacle (Orange, black, or grey cat)
+      if (hz.type === 'dust-bunny' || hz.type === 'cat') {
+        const speedMultiplier = hz.vx > 0 ? 1 : -1;
         
-        // Fuzzy spikes background
-        this.ctx.fillStyle = '#475569';
-        this.ctx.beginPath();
-        for (let a = 0; a < Math.PI * 2; a += Math.PI / 8) {
-          const r = 12 + Math.sin(time * 12 + a*3) * 3;
-          this.ctx.lineTo(r * Math.cos(a), r * Math.sin(a));
+        // Seed cat color dynamically using horizontal coordinate index
+        const catSeed = Math.sin(hz.x * 0.05) * 1000;
+        const colorVal = catSeed - Math.floor(catSeed);
+        let catColor = '#ea580c'; // default orange tabby
+        let stripesColor = '#c2410c';
+        let innerEarColor = '#fca5a5';
+        
+        if (colorVal < 0.33) {
+          catColor = '#1e293b'; // black cat
+          stripesColor = '#0f172a';
+        } else if (colorVal < 0.66) {
+          catColor = '#94a3b8'; // grey cat
+          stripesColor = '#64748b';
         }
+
+        this.ctx.save();
+        // Face moving direction
+        this.ctx.scale(speedMultiplier, 1);
+
+        // A. Tail (Waving back and forth)
+        const tailWiggle = Math.sin(time * 6.5 + hz.x) * 0.25;
+        this.ctx.save();
+        this.ctx.translate(-14, 2);
+        this.ctx.rotate(-0.8 + tailWiggle);
+        this.ctx.strokeStyle = catColor;
+        this.ctx.lineWidth = 4.5;
+        this.ctx.lineCap = 'round';
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 0);
+        this.ctx.quadraticCurveTo(-8, -12, -4, -20);
+        this.ctx.stroke();
+        this.ctx.restore();
+
+        // B. Legs (walking cycle animation)
+        const walkCycle = Math.sin(time * 9.0 + hz.x);
+        this.ctx.strokeStyle = stripesColor;
+        this.ctx.lineWidth = 4;
+        this.ctx.lineCap = 'round';
+        
+        // Front leg
+        this.ctx.beginPath();
+        this.ctx.moveTo(7, 4);
+        this.ctx.lineTo(7 + walkCycle * 4, 12);
+        this.ctx.stroke();
+        
+        // Back leg
+        this.ctx.beginPath();
+        this.ctx.moveTo(-7, 4);
+        this.ctx.lineTo(-7 - walkCycle * 4, 12);
+        this.ctx.stroke();
+
+        // C. Body
+        this.ctx.fillStyle = catColor;
+        this.ctx.beginPath();
+        this.ctx.ellipse(0, 0, 16, 10, 0, 0, Math.PI*2);
+        this.ctx.fill();
+
+        // Tabby Stripes (for orange/grey cats)
+        if (colorVal >= 0.33) {
+          this.ctx.strokeStyle = stripesColor;
+          this.ctx.lineWidth = 2.5;
+          this.ctx.beginPath();
+          // Stripe 1
+          this.ctx.moveTo(-5, -8);
+          this.ctx.lineTo(-5, -2);
+          // Stripe 2
+          this.ctx.moveTo(0, -9);
+          this.ctx.lineTo(0, -1);
+          // Stripe 3
+          this.ctx.moveTo(5, -8);
+          this.ctx.lineTo(5, -2);
+          this.ctx.stroke();
+        }
+
+        // D. Head
+        this.ctx.save();
+        this.ctx.translate(11, -8);
+        
+        this.ctx.fillStyle = catColor;
+        this.ctx.beginPath();
+        this.ctx.arc(0, 0, 9.5, 0, Math.PI*2);
+        this.ctx.fill();
+
+        // Pointy Ears
+        // Left Ear
+        this.ctx.beginPath();
+        this.ctx.moveTo(-6, -6);
+        this.ctx.lineTo(-9, -15);
+        this.ctx.lineTo(-1, -9);
+        this.ctx.closePath();
+        this.ctx.fill();
+        this.ctx.fillStyle = innerEarColor;
+        this.ctx.beginPath();
+        this.ctx.moveTo(-5.5, -7);
+        this.ctx.lineTo(-7.5, -12);
+        this.ctx.lineTo(-2.5, -8.5);
         this.ctx.closePath();
         this.ctx.fill();
         
-        // Inner body
-        this.ctx.fillStyle = '#64748b';
+        // Right Ear
+        this.ctx.fillStyle = catColor;
         this.ctx.beginPath();
-        this.ctx.arc(0, 0, 9, 0, Math.PI*2);
+        this.ctx.moveTo(1, -9);
+        this.ctx.lineTo(3, -16);
+        this.ctx.lineTo(6, -7);
+        this.ctx.closePath();
+        this.ctx.fill();
+        this.ctx.fillStyle = innerEarColor;
+        this.ctx.beginPath();
+        this.ctx.moveTo(1.5, -8.5);
+        this.ctx.lineTo(2.8, -13);
+        this.ctx.lineTo(4.8, -7.5);
+        this.ctx.closePath();
         this.ctx.fill();
 
-        // Glowing red eyes
-        this.ctx.fillStyle = '#ef4444';
+        // Glowing Cat Eyes (yellowish-green)
+        this.ctx.fillStyle = '#a3e635';
         this.ctx.beginPath();
-        this.ctx.arc(hz.vx > 0 ? 3 : -3, -2, 2.2, 0, Math.PI*2);
-        this.ctx.arc(hz.vx > 0 ? 8 : -8, -2, 2.2, 0, Math.PI*2);
+        this.ctx.ellipse(3, -1, 2.5, 1.8, 0.1, 0, Math.PI*2);
         this.ctx.fill();
+        
+        // Slit pupils
+        this.ctx.strokeStyle = '#000000';
+        this.ctx.lineWidth = 1.0;
+        this.ctx.beginPath();
+        this.ctx.moveTo(3, -2.5);
+        this.ctx.lineTo(3, 0.5);
+        this.ctx.stroke();
+
+        // Snout & Pink Nose
+        this.ctx.fillStyle = '#fca5a5';
+        this.ctx.beginPath();
+        this.ctx.arc(7, 2, 1.8, 0, Math.PI*2);
+        this.ctx.fill();
+
+        // Whiskers
+        this.ctx.strokeStyle = '#e2e8f0';
+        this.ctx.lineWidth = 1.0;
+        this.ctx.beginPath();
+        this.ctx.moveTo(6, 4);
+        this.ctx.lineTo(12, 5);
+        this.ctx.moveTo(6, 5);
+        this.ctx.lineTo(11, 8);
+        this.ctx.stroke();
+
+        this.ctx.restore(); // end head
+        this.ctx.restore(); // end direction
       }
 
       // Falling Household Toy Obstacle
