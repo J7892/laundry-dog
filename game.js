@@ -1667,16 +1667,56 @@ class Game {
     // 6. Jump Logic
     p.vy += this.GRAVITY;
     const jumpKey = this.keys['ArrowUp'] || this.keys['KeyW'] || this.keys['Space'];
-    if (jumpKey && p.onGround) {
-      p.vy = isBoosted ? -13.0 : -10.5;
-      p.onGround = false;
-      this.synth.playJump();
-      this.spawnDustCloud(p.x + p.width/2, p.y + p.height);
+    
+    // Track fresh button presses this frame to avoid auto-firing double jump
+    const jumpJustPressed = jumpKey && !this.lastJumpKey;
+    
+    if (p.onGround) {
+      p.hasDoubleJump = true;
     }
+    
+    if (jumpJustPressed) {
+      if (p.onGround) {
+        // First jump
+        p.vy = isBoosted ? -13.0 : -10.5;
+        p.onGround = false;
+        this.synth.playJump();
+        this.spawnDustCloud(p.x + p.width/2, p.y + p.height);
+      } else if (p.hasDoubleJump) {
+        // Double jump mid-air boost!
+        p.vy = isBoosted ? -11.0 : -8.5; // smaller second jump boost
+        p.hasDoubleJump = false; // consumed!
+        
+        // Play double jump sound (ascending notes)
+        if (this.synth) {
+          this.synth.playNote(440, 'triangle', 0.1, 0.06, 0); // A4
+          this.synth.playNote(659.25, 'triangle', 0.12, 0.06, 0.05); // E5
+        }
+        
+        // Spawn double jump mid-air sparkles/dust puff
+        this.spawnDustCloud(p.x + p.width/2, p.y + p.height);
+        for (let k = 0; k < 6; k++) {
+          this.particles.push({
+            x: p.x + p.width/2,
+            y: p.y + p.height,
+            vx: (Math.random() - 0.5) * 3.0,
+            vy: 0.5 + Math.random() * 1.5,
+            size: 2 + Math.random() * 3,
+            color: 'rgba(254, 240, 138, 0.7)', // Yellow sparkle
+            alpha: 1.0,
+            life: 0,
+            maxLife: 15 + Math.random() * 10
+          });
+        }
+      }
+    }
+    
     // Variable jump height: release key early to terminate jump rise
     if (!jumpKey && p.vy < -4.0) {
       p.vy = -4.0;
     }
+    
+    this.lastJumpKey = jumpKey;
 
     // Apply vertical motion
     p.y += p.vy;
