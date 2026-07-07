@@ -834,7 +834,7 @@ class Game {
       this.keys['KeyS'] = false;
 
       // Find all clickable buttons and inputs in the active overlay screen
-      const items = Array.from(activeOverlay.querySelectorAll('button:not(.hidden), .btn-level:not(.hidden), .btn-breed:not(.hidden)'));
+      const items = Array.from(activeOverlay.querySelectorAll('button:not(.hidden)'));
       if (items.length === 0) return;
 
       // Determine highlighted element
@@ -872,7 +872,7 @@ class Game {
           
           // Synthesize a soft menu click beep!
           if (this.synth) {
-            this.synth.playCollectionChime(); // small chime note
+            this.synth.playNote(880, 'sine', 0.05, 0.03); // Soft 880Hz sine beep!
           }
           this.gamepadMenuMoveCooldown = 15; // Cooldown of 250ms (at 60fps)
         }
@@ -888,8 +888,6 @@ class Game {
         if (!this.gamepadMenuClickLatch) {
           highlightedEl.click();
           this.gamepadMenuClickLatch = true;
-          // Clear active overlays highlights
-          this.clearMenuHighlights();
         }
       } else {
         this.gamepadMenuClickLatch = false;
