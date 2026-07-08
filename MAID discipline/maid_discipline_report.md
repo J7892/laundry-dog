@@ -1,0 +1,336 @@
+# Canadian Physician Regulators: MAID-Related Discipline Report
+
+**Report Generated on**: 2026-07-05 21:50:37
+
+This report lists physicians, decisions, and licensing conditions discovered on the websites of Canadian medical regulatory authorities where the underlying issue relates to the provision of Medical Assistance in Dying (MAID).
+
+## Ontario
+
+### [CPSOhttps://www.cpso.on.ca › Physicians › Policies-GuidanceCPSO - Advice to the Profession: Medical Assistance in Dying](https://www.cpso.on.ca/Physicians/Policies-Guidance/Policies/Medical-Assistance-in-Dying/Advice-to-the-Profession-Medical-Assistance-in-Dy)
+- **URL**: https://www.cpso.on.ca/Physicians/Policies-Guidance/Policies/Medical-Assistance-in-Dying/Advice-to-the-Profession-Medical-Assistance-in-Dy
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... nable health-care options, etc.). In some cases, it may be necessary to undertake more than one capacity assessment to have enough information to make a determination as to whether a patient has capacity. If the requester has mental health concerns and there is a risk of suicidality, physicians will also want to ensure the request for MAID is rationally considered by the patient during a period of stability, and not when the patient is having a mental health crisis. Grievous and Irremediable Medical Conditions A patient must h ...
+
+### [CPSOhttps://www.cpso.on.ca › Physicians › Policies-GuidanceCPSO - Legal Requirements](https://www.cpso.on.ca/Physicians/Policies-Guidance/Policies/Medical-Assistance-in-Dying/Legal-Requirements)
+- **URL**: https://www.cpso.on.ca/Physicians/Policies-Guidance/Policies/Medical-Assistance-in-Dying/Legal-Requirements
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... ath Not Reasonably Foreseeable Before a MAID provider administers a substance that causes a patient’s death, or prescribes or provides a substance for a patient to self-administer to cause their own death, 6 the MAID provider must: Be of the opinion that the patient has met all of the eligibility criteria. Ensure that the patient’s request for MAID was (i) made in writing, and (ii) signed and dated by the patient after the patient was informed by a phy ...
+
+### [CPSOhttps://www.cpso.on.ca › News › News-ArticlesCPSO - CPSO’s Effective Referral Requirement Affirmed by ...](https://www.cpso.on.ca/News/News-Articles/CPSOs-Effective-Referral-Requirement-Affirmed-by)
+- **URL**: https://www.cpso.on.ca/News/News-Articles/CPSOs-Effective-Referral-Requirement-Affirmed-by
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... ial legislation, and relevant CPSO policies. The MAID policy also provides that where a physician declines to provide medical assistance in dying for reasons of conscience or religion, the physician must not abandon the patient, and an effective referral must be provided. The MAID policy does not require physicians, in any circumstance, to provide MAID or conduct assessments for MAID c ...
+
+### [CPSOhttps://www.cpso.on.ca › About › Board-of-DirectorsCPSO - Board Updates](https://www.cpso.on.ca/About/Board-of-Directors/Board-Updates)
+- **URL**: https://www.cpso.on.ca/About/Board-of-Directors/Board-Updates
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... Report; Continuity of Care; Closing a Medical Practice; Policy Redesign Implementation; Effective Referral; CPR Orders; Governance Update; Transparency; Criminal Record Search; Feedback Wanted; By-law Amendments May 30-31, 2019 Teeswater Family Practitioner Honoured; Registrar/CEO’s Report; Strategic Plan; Policy Redesign Implementation – Batch 1; Policies – External consultations; Cayton Report; Patient Partnership; Governance Update; Posting Criminal Charges and Findings of Guilt from Other Jurisdictions – bylaw circulation March 1, 2019 Pediatric Rheumatologist Ho ...
+
+### [eDialoguehttps://dialogue.cpso.on.ca › articles › medical-assistanceMedical Assistance in Dying (MAID) - dialogue.cpso.on.ca](https://dialogue.cpso.on.ca/articles/medical-assistance-in-dying-maid)
+- **URL**: https://dialogue.cpso.on.ca/articles/medical-assistance-in-dying-maid
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... ans to relieve their suffering, and offered consultations with professionals who provide those services. It also requires individuals undergo a 90-day assessment period before receiving MAID. To reflect the new legal framework, the following key amendments were made to CPSO’s policy: Deleting the requirement that an individual’s natural death be reasonably foreseeable and adding the exclusion of mental illness as the sole condition that makes an individual eligible for MAID. (This exclusion will stay in place until March 17, 2023, ...
+
+### [prod-dialogue.cpso.on.cahttps://prod-dialogue.cpso.on.ca › articles › medicalMedical Assistance in Dying (MAID) - prod-dialogue.cpso.on.ca](https://prod-dialogue.cpso.on.ca/articles/medical-assistance-in-dying-maid)
+- **URL**: https://prod-dialogue.cpso.on.ca/articles/medical-assistance-in-dying-maid
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... ans to relieve their suffering, and offered consultations with professionals who provide those services. It also requires individuals undergo a 90-day assessment period before receiving MAID. To reflect the new legal framework, the following key amendments were made to CPSO’s policy: Deleting the requirement that an individual’s natural death be reasonably foreseeable and adding the exclusion of mental illness as the sole condition that makes an individual eligible for MAID. (This exclusion will stay in place until March 17, 2023, ...
+
+### [register.cpso.on.cahttps://register.cpso.on.ca › File › downloadSUMMARY of the Decision of the Inquiries, Complaints and ...](https://register.cpso.on.ca/File/download.aspx?Entity=cpso_alert&Attribute=cpso_alertdocument&Id=40a24bd7-e04a-f111-bec7-002248ae17d1)
+- **URL**: https://register.cpso.on.ca/File/download.aspx?Entity=cpso_alert&Attribute=cpso_alertdocument&Id=40a24bd7-e04a-f111-bec7-002248ae17d1
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... d to understand his reasoning. After reviewing all the information gathered in the investigation, including the Assessor’s reports and the Respondent’s responses, which included a report he obtained also opining on his care and conduct, the Committee agreed with the Assessor’s conclusions. MAID assessment and provision is governed by clear legislative a ...
+
+### [register.cpso.on.cahttps://register.cpso.on.ca › File › downloadSUMMARY of the Decision of the Inquiries, Complaints and ...](https://register.cpso.on.ca/File/download.aspx?Entity=cpso_alert&Attribute=cpso_alertdocument&Id=430fa5fb-394d-f111-bec7-002248ae17b6)
+- **URL**: https://register.cpso.on.ca/File/download.aspx?Entity=cpso_alert&Attribute=cpso_alertdocument&Id=430fa5fb-394d-f111-bec7-002248ae17b6
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... dent) INTRODUCTION The Complainant contacted the College of Physicians and Surgeons of Ontario (the College) to express concerns about the Respondent’s care and conduct while assessing the Patient for and providing Medical Assistance in Dying (MAID) to the Patient. The Patient’s medical history is significant for an inflammatory bowel disease, associated surgeries, and m ...
+
+### [eDialoguehttps://dialogue.cpso.on.ca › 2021 › 06Medical Assistance in Dying (MAID) | Dialogue - CPSO's ...](https://dialogue.cpso.on.ca/2021/06/medical-assistance-in-dying-maid)
+- **URL**: https://dialogue.cpso.on.ca/2021/06/medical-assistance-in-dying-maid
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... ans to relieve their suffering, and offered consultations with professionals who provide those services. It also requires individuals undergo a 90-day assessment period before receiving MAID. To reflect the new legal framework, the following key amendments were made to CPSO’s policy: Deleting the requirement that an individual’s natural death be reasonably foreseeable and adding the exclusion of mental illness as the sole condition that makes an individual eligible for MAID. (This exclusion will stay in place until March 17, 2023, ...
+
+## British Columbia
+
+### [College of Physicians and Surgeons of BChttps://www.cpsbc.ca › files › pdfMedical Assistance in Dying - cpsbc.ca](https://www.cpsbc.ca/files/pdf/CPSBC-PS-Medical-Assistance-in-Dying.pdf)
+- **URL**: https://www.cpsbc.ca/files/pdf/CPSBC-PS-Medical-Assistance-in-Dying.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... rtable information from physicians, nurse practitioners and pharmacists. Licensees must be aware of, and comply with, both the federal legislation and provincial reporting requirements for MAiD. The practice standard outlines the Criminal Code safeguards for when death is reasonably foreseeable (track 1) and when death is not reasonably foreseeable (track 2). This excludes cases where a mental disorder is the sole underlying condition. CPSBC’s position Rights and autonomy Patients have the right to make decisions about their bodily i ...
+
+### [College of Physicians and Surgeons of BChttps://www.cpsbc.ca › files › pdfMedical Assistance in Dying (MAiD) - cpsbc.ca](https://www.cpsbc.ca/files/pdf/CPSBC-FAQ-Medical-Assistance-in-Dying.pdf)
+- **URL**: https://www.cpsbc.ca/files/pdf/CPSBC-FAQ-Medical-Assistance-in-Dying.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... or specialist designation to have expertise in a person’s illness, disease, or disability. Expertise could be obtained, for example, through training or previous experience with patient(s) with a similar condition. How is “90 clear days” defined? The term “clear days” is defined in section 27 of the Interpretation Act, which applies to all federal legislation. Essentially, a “clear day” excludes the days on which the events on either end occur. In the case of MAiD, this means that the day on which the assessment for MAiD is done, and the day on which ...
+
+## Alberta
+
+### [College of Physicians & Surgeons of Alberta | CPSAhttps://cpsa.ca › physicians › standards-of-practiceMedical Assistance In Dying - College of Physicians ... - CPSA](https://cpsa.ca/physicians/standards-of-practice/medical-assistance-in-dying/)
+- **URL**: https://cpsa.ca/physicians/standards-of-practice/medical-assistance-in-dying/
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... Medical Assistance In Dying - College of Physicians & Surgeons of Alberta | CPSA PLEASE NOTE: The MAID standard is currently under review and is in the process of being updated to align with current legislation. As of July 2024, pat ...
+
+### [College of Physicians & Surgeons of Alberta | CPSAhttps://cpsa.ca › 025-maidMedical Assistance in Dying (MAID) - College of ... - CPSA](https://cpsa.ca/025-maid/)
+- **URL**: https://cpsa.ca/025-maid/
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... of Physicians & Surgeons of Alberta | CPSA This consultation closed on Jan. 11, 2023. About the standard CPSA issued the Medical Assistance in Dying (MAID) standard of practice in 2016 when MAID was first legalized in Canada for individuals with terminal illnesses. In 2021, Bill C-7 came into effect, which expanded the eligibility of MAID to include individuals with non-terminal physical conditions. On March 17, 2023, individuals whose sole underlying medica ...
+
+### [College of Physicians & Surgeons of Alberta | CPSAhttps://cpsa.ca › wp-content › uploadsMedical Assistance in Dying (MAID) - CPSA](https://cpsa.ca/wp-content/uploads/2020/06/AP_Medical-Assistance-in-Dying.pdf)
+- **URL**: https://cpsa.ca/wp-content/uploads/2020/06/AP_Medical-Assistance-in-Dying.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... us and irremediable ................................ ................................ ...16 Note: a glossary of terms can be found at the end of this document. Glossary terms are indicated in teal with a “G” throughout this document. Introduction *PLEASE NOTE: The MAID standard is currently under review and is in the process of being updated to align with current legislation. As of publication, patients whose sole underlying condition is mental illness remain i ...
+
+### [College of Physicians & Surgeons of Alberta | CPSAhttps://cpsa.ca › consultation › consultation-028MAID - College of Physicians & Surgeons of Alberta | CPSA](https://cpsa.ca/physicians/standards-of-practice/consultation/consultation-028/028-maid/)
+- **URL**: https://cpsa.ca/physicians/standards-of-practice/consultation/consultation-028/028-maid/
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... About the standard This consultation closed on Jan. 15, 2024. Medical Assistance in Dying (MAID) is the administration or prescribing by a physician (MD) or nurse practitioner (NP) of a substance to a person, at their request, that causes death. In 2021, Bill C-7 came into effect, which expanded the eligibility of MAID to include individuals whose death is not reasonably foreseeable. After being delayed by one year, contingent on the approval of federal legislation, individuals whose s ...
+
+### [College of Physicians & Surgeons of Alberta | CPSAhttps://cpsa.ca › wp-content › uploadsMedical Assistance in Dying (MAID) - CPSA](https://cpsa.ca/wp-content/uploads/2020/05/Medical-Assistance-in-Dying.pdf)
+- **URL**: https://cpsa.ca/wp-content/uploads/2020/05/Medical-Assistance-in-Dying.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... STANDARDS OF PRACTICE Medical Assistance in Dying (MAID) Under Review: Yes Issued by Council: June 1, 2016 Reissued by Council: Apr. 1, 2023 Medical Assistance in Dying The Standards of Practice of the College of Physicians & Surgeons of Alberta (“CPSA”) are the minimum standards of professional behavior and ethical conduct expected of all regulated members registered in Alberta. Standards of Practice are enforceable under the Health Professions Act ...
+
+### [College of Physicians & Surgeons of Alberta | CPSAhttps://cpsa.ca › 2022 › 11Medical Assistance in Dying (MAID) - cpsa.ca](https://cpsa.ca/wp-content/uploads/2022/11/Consultation-025-MAID-clean.pdf)
+- **URL**: https://cpsa.ca/wp-content/uploads/2022/11/Consultation-025-MAID-clean.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... STANDARDS OF PRACTICE Medical Assistance in Dying (MAID) Under Review: Yes Issued By: Council: June 1, 2016 Medical Assistance in Dying The Standards of Practice of the College of Physicians & Surgeons of Alberta (“CPSA”) are the minimum standards of professional behavior and ethical conduct expected of all regulated members registered in Alberta. Standards of Practice are enforceable under the He ...
+
+### [College of Physicians & Surgeons of Alberta | CPSAhttps://cpsa.ca › wp-content › uploadsMedical Assistance in Dying (MAID) - cpsa.ca](https://cpsa.ca/wp-content/uploads/2023/03/AA_MAID.pdf)
+- **URL**: https://cpsa.ca/wp-content/uploads/2023/03/AA_MAID.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... d would be eligible, for health services funded by a federal, provincial or territorial government in Canada; 2. be at least 18 years of age; 3. be capable of making decisions with respect to their health; 4. have a grievous and irremediable medical condition that causes enduring suffering that is intolerable to the patient and cannot be relieved under conditions which the patient considers acceptable; 5. have made a voluntary request for MAID that, in particular, was not made as a re ...
+
+### [College of Physicians & Surgeons of Alberta | CPSAhttps://cpsa.ca › Medical-Assistance-in-Dying-markedMedical Assistance in Dying (MAID) - CPSA](https://cpsa.ca/wp-content/uploads/2023/12/Medical-Assistance-in-Dying-marked.pdf)
+- **URL**: https://cpsa.ca/wp-content/uploads/2023/12/Medical-Assistance-in-Dying-marked.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... STANDARDS OF PRACTICE Medical Assistance in Dying (MAID) Under Review: NoYes Issued by Council: June 1, 2016 Reissued by Council: Apr. 1, 2023 Medical Assistance in Dying The Standards of Practice of the College of Physicians & Surgeons of Alberta (“CPSA”) are the minimum standards of professional behavior and ethical conduct expected of all regulated members registered in Alberta. Standards of Practice are enforceable under the H ...
+
+### [College of Physicians & Surgeons of Alberta | CPSAhttps://cpsa.ca › news › standards-of-practice-updatesStandards of practice updates: Medical Assistance in Dying ...](https://cpsa.ca/news/standards-of-practice-updates-medical-assistance-in-dying-continuing-competence-and-restricted-activities/)
+- **URL**: https://cpsa.ca/news/standards-of-practice-updates-medical-assistance-in-dying-continuing-competence-and-restricted-activities/
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... d changes to this standard include: Added details to ensure the patient’s capacity and consent for MAID. The safeguards outlined in the Criminal Code of Canada when determining a patient’s eligibility. The use of an AHS reporting form to fulfill federal reporting requirements. Originally, the revised standard also captured changes prompted by Bill C-7, federal legislation which removed the exclusion of mental illness f ...
+
+## Quebec
+
+### [cms.cmq.orghttps://cms.cmq.org › files › documentsExploring the psychological suffering of a person requesting ...](https://cms.cmq.org/files/documents/Pratiquer-medecine/fin-de-vie/exploring-psychological-suffering.pdf)
+- **URL**: https://cms.cmq.org/files/documents/Pratiquer-medecine/fin-de-vie/exploring-psychological-suffering.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... that it corresponds to the usual and expected role of the physician, and also reflects the reality of the therapeutic relationship. In fact, society regularly calls upon physicians to make judgments about their patients’ states, for example when they must determine whether a pe rson should receive certain benefits, services, or healthcare interventions. However, these determinations do not invalidate people’s experiences.6 Before they can provide MAID, physicians must inevitably call upon their clinical judgment in determining w hether a person’s suff ...
+
+### [Collège des médecins du Québechttps://www.cmq.org › en › newsOttawa Must Allow Advance Requests for Medical Assistance in ...](https://www.cmq.org/en/news/ottawa-demandes-anticipees-amm)
+- **URL**: https://www.cmq.org/en/news/ottawa-demandes-anticipees-amm
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... iction. It requires amendment." Why Does the Criminal Code Prevent This Mechanism from Being Implemented in Quebec? "Under the Criminal Code , a person must be capable of providing consent to receive MAiD just before its administration, unless they have previously benefited from a waiver of final consent. Additionally, the person must suffer from a disease, disability, or condition causing persistent and intolerable physical or psychological suffering that cannot be allevi ...
+
+### [Catholic Medical Quarterlyhttp://www.cmq.org.uk › CMQ › 2026Canadian Physician sends open letter to the House of Lords ...](http://www.cmq.org.uk/CMQ/2026/Feb/canadian_physician_sends_open_le.html)
+- **URL**: http://www.cmq.org.uk/CMQ/2026/Feb/canadian_physician_sends_open_le.html
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... ndergoing every investigation necessary to confirm the diagnosis or rule out effective treatment. He could have given up hope while the situation was still filled with hope. The power to move people to give up is one of the dangerous and misleading aspects of medically assisted dying. However, I was able to get his attention and persuade him that the situation was hopeful and that he should get more tests and undergo treatment ...
+
+### [cms.cmq.orghttps://cms.cmq.org › files › documentsGuide - Le médecin et le consentement aux soins](https://cms.cmq.org/files/documents/Guides/cmq-guide-consentement-soins.pdf)
+- **URL**: https://cms.cmq.org/files/documents/Guides/cmq-guide-consentement-soins.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... i les DMA s’appliquent, elles ont, à l’égard des professionnels de la santé ayant accès au registre ou au dossier médical, « la même valeur que des volontés exprimées par une personne apte à consentir aux soins149 ». Rappelons que le médecin doit respec- ter le désir du patient de ne pas poursuivre certains soins ou de refuser les soins proposés. Cependant, en aucun cas un médecin n’est tenu de ...
+
+## Manitoba
+
+### [The College of Physicians & Surgeons of Manitobahttps://cpsm.mb.ca › assets › Standards of PracticeStandard of Practice Medical Assistance in Dying (MAiD) - CPSM](https://cpsm.mb.ca/assets/Standards%20of%20Practice/Standard%20of%20Practice%20Medical%20Assistance%20in%20Dying%20(MAID).pdf)
+- **URL**: https://cpsm.mb.ca/assets/Standards%20of%20Practice/Standard%20of%20Practice%20Medical%20Assistance%20in%20Dying%20(MAID).pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... t of structural vulnerabilities arise, regardless of the patient’s diagnoses. As such, it recommended a process to facilitate the development of Standards of Practice by medical regulatory authorities for the assessment of MAiD requests where questions about incurability, irreversibility, capacity, suicidality, and the impact of structural vulnerabilities arise, including but not limited to provision of MAiD to patients for whom a mental disorder is the sole underlying medical condition (MD -SUMC). The Model Practice Standard for Medical Assistance in Dy ...
+
+### [The College of Physicians & Surgeons of Manitobahttps://cpsm.mb.ca › for-the-publicThe College of Physicians & Surgeons of Manitoba - CPSM](https://cpsm.mb.ca/for-the-public)
+- **URL**: https://cpsm.mb.ca/for-the-public
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... For the Public Need a doctor? Find a Doctor! Complaints Process Visit the links below to learn more about: How CPSM is Protecting the Public Medical (Patient) Records Public Consultations Disciplinary Ac ...
+
+### [The College of Physicians & Surgeons of Manitobahttps://www.cpsm.mb.ca › assets › MAIDBringing up Medical Assistance In Dying (MAID) as a ... - CPSM](https://www.cpsm.mb.ca/assets/MAID/CAMAP%20Guidance%20document%20Bringing%20up%20Medical%20Assistance%20In%20Dying.pdf)
+- **URL**: https://www.cpsm.mb.ca/assets/MAID/CAMAP%20Guidance%20document%20Bringing%20up%20Medical%20Assistance%20In%20Dying.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... he accepted bounds of ethical nursing practise when patients request to die. ​ 1,2 The clinical perspective of the meaning of the word “counsel” has no bearing on the legal meaning. Therefore, so long as they do not have the aim of inducing, persuading, or convincing the patient to request MAID, any healthcare professional can legally provide information, initiate and engage in discussion, and ...
+
+### [The College of Physicians & Surgeons of Manitobahttps://cpsm.mb.ca › assets › CouncilMarch Council Meeting Update - cpsm.mb.ca](https://cpsm.mb.ca/assets/Council/Minutes/March%202024%20Council%20Update.pdf)
+- **URL**: https://cpsm.mb.ca/assets/Council/Minutes/March%202024%20Council%20Update.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... ractices: Doctor/Pharmacist Relationship Standard of Practice Medical Assistance in Dying (MAiD) The revised Standard of Practice - Medical Assistance in Dying (MAiD) was approved. Revisions to the Standard were initiated to address Criminal Code amendments that were scheduled to come into force on March 17, 2024, that would have permitted MAiD where a mental disorder is the sole underlying medical condition (MD-SUMC) of the patient requesting MAiD. During the consultation period, a Bill was introduced in Parliament to postpone this provis ...
+
+### [The College of Physicians & Surgeons of Manitobahttps://cpsm.mb.ca › assets › CAMAP Guidance documentBringing up Medical Assistance In Dying (MAID) as a clinical ...](https://cpsm.mb.ca/assets/CAMAP%20Guidance%20document%20Bringing%20up%20Medical%20Assistance%20In%20Dying.pdf)
+- **URL**: https://cpsm.mb.ca/assets/CAMAP%20Guidance%20document%20Bringing%20up%20Medical%20Assistance%20In%20Dying.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... he accepted bounds of ethical nursing practise when patients request to die. ​ 1,2 The clinical perspective of the meaning of the word “counsel” has no bearing on the legal meaning. Therefore, so long as they do not have the aim of inducing, persuading, or convincing the patient to request MAID, any healthcare professional can legally provide information, initiate and engage in discussion, and ...
+
+## Saskatchewan
+
+### [uat.cps.sk.cahttps://uat.cps.sk.ca › iMIS › DocumentsPOLICY - uat.cps.sk.ca](https://uat.cps.sk.ca/iMIS/Documents/Legislation/Policies/POLICY%20-%20Medical%20Assistance%20in%20Dying%20-%20Patient%27s%20death%20is%20not%20reasonably%20foreseeable.pdf)
+- **URL**: https://uat.cps.sk.ca/iMIS/Documents/Legislation/Policies/POLICY%20-%20Medical%20Assistance%20in%20Dying%20-%20Patient%27s%20death%20is%20not%20reasonably%20foreseeable.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... 16.2 The legislation was further amended effective March 17, 2021.3 The legislation4 contains a number of requirements that must exist for physicians or nurse practitioners to provide Medical Assistance in Dying. The most important of those are: 1) The patient must be eligible for health services funded by a government in Canada; 2) The patient must be at least 18 years of age and capable of making decisions with respect to their health; 3) The patient must have a grievous and irremediable medical condition; 1 Carter v. Canada (Attorney General), 2015 SCC 5; https://www.canlii.org/en/ca/scc/doc/2015/2015scc ...
+
+### [dev.cps.sk.cahttps://dev.cps.sk.ca › iMIS › DocumentsPOLICY - dev.cps.sk.ca](https://dev.cps.sk.ca/iMIS/Documents/Legislation/Policies/POLICY%20-%20Medical%20Assistance%20in%20Dying%20-%20Patient%27s%20death%20is%20reasonably%20foreseeable.pdf)
+- **URL**: https://dev.cps.sk.ca/iMIS/Documents/Legislation/Policies/POLICY%20-%20Medical%20Assistance%20in%20Dying%20-%20Patient%27s%20death%20is%20reasonably%20foreseeable.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... 7, 2016.2 The legislation was further amended effective March 17, 2021.3 The legislation4 contains a number of requirements that must exist for physicians or nurse practitioners to provide Medical Assistance in Dying. The most important of those are: 1) The patient must be eligible for health services funded by a government in Canada; 2) The patient must be at least 18 years of age and capable of making decisions with respect to their health; 3) The patient must have a grievous and irremediable medical condition; 1 Carter v. Canada (Attorney General), 2015 SCC 5; https://www.canlii.org/en/ca/scc/doc/2015/20 ...
+
+## Nova Scotia
+
+### [College of Physicians & Surgeons of Nova Scotiahttps://cpsns.ns.ca › registrants › physiciansMedical Assistance in Dying | College of Physicians and ...](https://cpsns.ns.ca/registrants/physicians/standards-guidelines/medical-assistance-in-dying/)
+- **URL**: https://cpsns.ns.ca/registrants/physicians/standards-guidelines/medical-assistance-in-dying/
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... pplicable minimum period of residence or waiting period, would be eligible for health services funded by the Province of Nova Scotia; The patient is at least 18 years of age and capable of making decisions with respect to their health; 8 The patient’s request for medical assistance in dying is a voluntary one, made freely, without coercion, undue influence, or any form of external pressure; 9 The patient gives informed consent to receive medical assistance in dying after having been informed ...
+
+## New Brunswick
+
+### [College of Physicians and Surgeons of New Brunswickhttps://cpsnb.org › images › pdfsMAID-AMM - cpsnb.org](https://cpsnb.org/images/pdfs/MAID-AMM.pdf)
+- **URL**: https://cpsnb.org/images/pdfs/MAID-AMM.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... omplexity or risk, the MAiD assessor or MAiD provider should consider consulting with one or more appropriate colleagues. This may be particularly relevant in cases involving complex medical conditions or situations where the patient has declined all reasonable treatment options. In certain cases, more than one capacity assessment may be required in order to obtain sufficient i ...
+
+## Newfoundland & Labrador
+
+### [CPSNLhttps://cpsnl.ca › wp-content › uploadsMedical Assistance in Dying - cpsnl.ca](https://cpsnl.ca/wp-content/uploads/Standards-and-Guidelines/Model-Practice-Standard-Medical-Assistance-in-Dying-MAID.pdf)
+- **URL**: https://cpsnl.ca/wp-content/uploads/Standards-and-Guidelines/Model-Practice-Standard-Medical-Assistance-in-Dying-MAID.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... tandard 1.0 Preamble Medical assistance in dying (MAID) has been legal in Québec since 2015 and in the rest of Canada since 2016 1. Since then, the law with respect to eligibility for MAID has continued to evolve.2 This Standard reflects the current state of Canadian law with respect to MAID (as established by the Criminal Code ). Except where otherwise noted, this Standard applies to all MAID cases including requests for MAID where a mental disorder is the sole underlying medical condition (MAID MD-SUMC) when such requests become legal on March 17, 2024.3 Throughout the Standard, the te ...
+
+### [CPSNLhttps://cpsnl.ca › wp-content › uploadsMedical Assistance in Dying - CPSNL](https://cpsnl.ca/wp-content/uploads/Standards-and-Guidelines/Advice-to-the-Profession-Medical-Assistance-in-Dying-MAID.pdf)
+- **URL**: https://cpsnl.ca/wp-content/uploads/Standards-and-Guidelines/Advice-to-the-Profession-Medical-Assistance-in-Dying-MAID.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... roviders must document the reasoning and evidence upon which their assessment of capacity was based supporting their finding of capacity or incapacity. What is irremediability? The legal term ‘irremediable’ is part of the MAID eligibility criterion ‘grievous and irremediable medical condition.’ This criterion is defined in the Criminal Code by way of three componen ...
+
+### [CPSNLhttps://cpsnl.ca › Medical-Assistance-in-DyingPreamble - cpsnl.ca](https://cpsnl.ca/wp-content/uploads/Standards-and-Guidelines/Medical-Assistance-in-Dying.pdf)
+- **URL**: https://cpsnl.ca/wp-content/uploads/Standards-and-Guidelines/Medical-Assistance-in-Dying.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... Medical Assistance in Dying Standard of Practice A Standard of Practice is the minimum standard of professional behavior and ethical conduct expected by the College on a specific issue. Preamble On February 6, 2015, the Supreme Court of Canada issued a ruling in Carter v. Canada (Attorney General) striking down certain provisions of the Criminal Code of Canada relating to medically assisted death. Medical Assistance in Dying (MAID) has been legal in Newfoundland and Labrador since 2016. Federal legislation establishes the lega ...
+
+## Prince Edward Island
+
+### [CPSPEIhttps://www.cpspei.ca › wp-content › uploadsThe College of Physicians and Surgeons 14 Paramount Dr. of ...](https://www.cpspei.ca/wp-content/uploads/2024/07/Medical-Assistance-in-Dying-Policy-MAiD-June-2024.pdf)
+- **URL**: https://www.cpspei.ca/wp-content/uploads/2024/07/Medical-Assistance-in-Dying-Policy-MAiD-June-2024.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... d to the other practitioner or to the person making the request in any other way that would affect their objectivity; 5.2.2 act consistently with the Professional Standards and Guidelines Regarding Treating Self and Family Members regarding treating family members or anyone with whom they have a close personal or emotional involvement; and, 5.2.3 complete all the required documentation and reporting as set out in section 20.0. Page 5 of 15 5.3 A request for MAID or for assessment for MAiD is a confidential matter between a physician and patient. Assessors and provid ...
+
+### [CPSPEIhttps://www.cpspei.ca › wp-content › uploadsPolicy on Medical Assistance in Dying - CPSPEI](https://www.cpspei.ca/wp-content/uploads/2019/11/Medical-Assistance-in-Dying-Policy-Nov-2019.pdf)
+- **URL**: https://www.cpspei.ca/wp-content/uploads/2019/11/Medical-Assistance-in-Dying-Policy-Nov-2019.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... In the same decision, the Supreme Court also found that: 1) Nothing in its declaration compels physicians to provide assistance in dying. 2) The Charter rights of patients and physicians need to be reconciled in any legislative or regulatory regime in which medical assistance in dying is permitted. 3) Physicians are capable of reliably assessing patient competence and it is possible to detect vulnerability and coercion, and undue influence. 4) The principles of informed consent can apply. On January 15, 2016 (before the February 6, 2016 date on which the original suspension would end) the Supreme Cour ...
+
+## Yukon
+
+### [yukonmedicalcouncil.cahttps://www.yukonmedicalcouncil.ca › pdfs › MAIDSTANDARD OF PRACTICE - Yukon Medical Council](https://www.yukonmedicalcouncil.ca/pdfs/MAID.pdf)
+- **URL**: https://www.yukonmedicalcouncil.ca/pdfs/MAID.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... STANDARD OF PRACTICE Medical Assistance in Dying (MAID) YMCS-3.6 Medical Practice 1 Standards of Practice of the Yukon Medical Council (“the Council”) are the minimum standards of professional behavior and ethical conduct expected of all physicians registered in Yukon. Standards of Practice will be referenced in the management of complaints and in discipline 1. Background /Summary As of March 17, 2021, the Criminal Code was amended and there are now two different sets of safeguar ...
+
+### [yukonmedicalcouncil.cahttps://www.yukonmedicalcouncil.ca › pdfs › MDSTANDARD OF PRACTICE - yukonmedicalcouncil.ca](https://www.yukonmedicalcouncil.ca/pdfs/MD.YMC_MAID_final_March_2023.pdf)
+- **URL**: https://www.yukonmedicalcouncil.ca/pdfs/MD.YMC_MAID_final_March_2023.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... STANDARD OF PRACTICE Medical Assistance in Dying (MAiD) YMCS-3.6 Medical Practice 1 Standards of Practice of the Yukon Medical Council (“the Council”) are the minimum standards of professional behavior and ethical conduct expected of all physicians registered in Yukon. Standards of Practice will be referenced in the management of complaints and in discipline 1. Background /Summary On January 1, 2023, new reporting requirements come into force and the links in this document were up ...
+
+## Northwest Territories
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › en › servicesMedical Assistance in Dying (MAID) | Health and Social Services](https://www.hss.gov.nt.ca/en/services/medical-assistance-dying-maid)
+- **URL**: https://www.hss.gov.nt.ca/en/services/medical-assistance-dying-maid
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... ents and health care providers involved in medical assistance in dying. Medical Assistance in Dying Guidelines have been developed to ensure this service is provided in a safe, fair and consistent manner in the Northwest Territories. Eligibility Criteria To access this service, a person must meet ALL of the following criteria: Be eligible for NWT health services; Be at least 18 years of age and capable of making decisions with respect to their health; Have a “grievous and irremediable medical condition”: Have a serious and incurable illness, disease, or disability; Be in an advanced ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › professionals › sitesSection II – Prescriptions for Medical Assistance in Dying ...](https://www.hss.gov.nt.ca/professionals/sites/professionals/files/resources/maid-medication-protocol-prescription-form.pdf)
+- **URL**: https://www.hss.gov.nt.ca/professionals/sites/professionals/files/resources/maid-medication-protocol-prescription-form.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... ials x affirmed that the patient has been assessed to have decisional capacity; x affirmed that the patient has been determined to suffer from a grievous and irremediable medical condition; and x affirmed that the patient has provided consent for Medical Assistance in Dying Collaboration The Providing Practitioner and the pharmacist must discuss: Practitioner Initials Pharm ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › maid_information_sheetMEDICAL ASSISTANCE IN DYING INFORMATION FOR HEALTH AND SOCIAL ...](https://www.hss.gov.nt.ca/professionals/sites/professionals/files/resources/maid_information_sheet.pdf)
+- **URL**: https://www.hss.gov.nt.ca/professionals/sites/professionals/files/resources/maid_information_sheet.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... tarily request medical assistance in dying, without pressure or influence from anyone else; and • Give informed consent throughout the process. 3. Are those suffering from mental illness eligible for medical assistance in dying? • Mental illness is excluded as a ‘serious and incurable illness, disease, or disability’ for the purposes of medical assistance in dying , and therefore, those whose sole underlying medical condition is a mental illness are not eligible for medical assistance in dying. • Mental illness as ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › professionals › sitesMEDICAL ASSISTANCE IN DYING INFORMATION FOR HEALTH CARE ... - Gov](https://www.hss.gov.nt.ca/professionals/sites/professionals/files/resources/maid-information-health-care-providers.pdf)
+- **URL**: https://www.hss.gov.nt.ca/professionals/sites/professionals/files/resources/maid-information-health-care-providers.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... t. If you are uncomfortable doing so, d irect the patient to contact the Central Coordinating Service to facilitate access to a practitioner that can provide them with more information, conduct an assessment, and if applicable, provide medical assistance in dying. NWT Central Coordinating Service Toll-free at 1-855-846-9601 Monday - Friday: 8:30am - 5:00pm • If you h ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › professionals › sitesMedical Assistance in Dying Interim Medication Protocols for ...](https://www.hss.gov.nt.ca/professionals/sites/professionals/files/resources/maid-interim-medication-protocols.pdf)
+- **URL**: https://www.hss.gov.nt.ca/professionals/sites/professionals/files/resources/maid-interim-medication-protocols.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... to the patient for self-administration. Demographic Information The patient and Providing P ractitioner information is collected as is required on all other medical records. 4 Verification of Request Providing Practitioner’s initials: affirm that the individual has decisional capacity; that the presence of a grievous and irremediable condition has been determined by two practitioners; and that the Providing Practitioner has received consent fro ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › sites › hssMEDICAL ASSISTANCE IN DYING INFORMATION FOR THE PUBLIC - Gov](https://www.hss.gov.nt.ca/sites/hss/files/resources/maid-information-patients-families_0.pdf)
+- **URL**: https://www.hss.gov.nt.ca/sites/hss/files/resources/maid-information-patients-families_0.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... Be at least 18 years old; o Be eligible for publicly-funded health services in Canada; o Voluntarily request medical assistance in dying, without pressure or influence from anyone else; and o Give informed consent to receive medical assistance in dying after you have been informed of other options to help your suffering. 9. Am I eligible for medical assistance in dying if mental illness is the only cause of my suffering? • Having a mental illness does not exclude you from accessing medical assistance in ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › sites › hssMINISTERIAL DIRECTIVE - hss.gov.nt.ca](https://www.hss.gov.nt.ca/sites/hss/files/resources/md-medical-assistance-dying-guidelines-nwt.pdf)
+- **URL**: https://www.hss.gov.nt.ca/sites/hss/files/resources/md-medical-assistance-dying-guidelines-nwt.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... s to prosecute a doctor for assisting someone with incurable suffering who wants to end their life. Amendments to the Criminal Code, setting out the medical assistance in dying (MAID) regime in Canada, came into effect in June 2016, and further changes came into force in March 2021, allowing those with a “grievous and irremediable medical condition” but whose death is not near to access MAID. The Guidelines were initially intended as an interim measure until a l ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › en › servicesMedical Assistance in Dying (MAID) | Health and Social Services](https://www.hss.gov.nt.ca/en/services/medical-assistance-dying-maid?page=1)
+- **URL**: https://www.hss.gov.nt.ca/en/services/medical-assistance-dying-maid?page=1
+- **Document Type**: Web Page
+- **Excerpt / Reason**:
+  > ... ents and health care providers involved in medical assistance in dying. Medical Assistance in Dying Guidelines have been developed to ensure this service is provided in a safe, fair and consistent manner in the Northwest Territories. Eligibility Criteria To access this service, a person must meet ALL of the following criteria: Be eligible for NWT health services; Be at least 18 years of age and capable of making decisions with respect to their health; Have a “grievous and irremediable medical condition”: Have a serious and incurable illness, disease, or disability; Be in an advanced ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › sites › hssMEDICAL ASSISTANCE IN DYING INTERIM GUIDELINES FOR THE ... - Gov](https://www.hss.gov.nt.ca/sites/hss/files/resources/interim-guidelines-medical-assistance-dying.pdf)
+- **URL**: https://www.hss.gov.nt.ca/sites/hss/files/resources/interim-guidelines-medical-assistance-dying.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... t is eligible or, but for any applicable minimum period of residence or waiting period, would be eligible for health services funded by a government in Canada, such as a provincial/territorial health care plan or a federal health care plan for those in the Canadian Armed Forces; (b) The patient is at least 18 years of age and capable of making decisions w ith respect to their health; (c) The patient has a Grievous an ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › sites › hssMEDICAL ASSISTANCE IN DYING QUESTIONS AND ANSWERS FOR ... - Gov](https://www.hss.gov.nt.ca/sites/hss/files/resources/maid-qas-patients-families.pdf)
+- **URL**: https://www.hss.gov.nt.ca/sites/hss/files/resources/maid-qas-patients-families.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... eacefully. Th e patient may be able to take the medication themselves in the presence of a Practitioner. • The best option for the patient will depend on the patient’s wishes, as well as their needs and abilities. • Together, the patient and the practitioner will determine the method, including which medications will be used. Q. What assessments will be required? • The assessments will include: o A diagnosis and prognosis of the patient’s condition, including an ass ...
+
+### [hss.gov.nt.cahttps://www.hss.gov.nt.ca › sites › hssMEDICAL ASSISTANCE IN DYING GUIDELINES FOR THE ... - Gov](https://www.hss.gov.nt.ca/sites/hss/files/resources/maid-interim-guidelines.pdf)
+- **URL**: https://www.hss.gov.nt.ca/sites/hss/files/resources/maid-interim-guidelines.pdf
+- **Document Type**: PDF Document
+- **Excerpt / Reason**:
+  > ... nce in Dying; or • If the Practitioner is not willing to provide Form 1, provide the patient with the Central Coordinating Service’s contact information, which can assist the patient in completing the Form 1, provide more information on Medical Assistance in Dying, and facilitate access to a willing Practitioner for assessment. The Practitioner may offer to contact the Central Coordinating Service on the patient’s behalf if appropriate. B. Formal Written Request Process A patient wish ...
+

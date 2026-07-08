@@ -1,0 +1,10 @@
+# Ignore Python virtual environments
+MAID discipline/venv/
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Ignore logs
+*.log
+MAID discipline/*.log
